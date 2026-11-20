@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hoạt động 3: Dynamic UI Render - Đổ dữ liệu tự động | Tuần 12</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-brand">
+        <div class="brand-icon"><i class="fas fa-cubes"></i></div>
+        <div class="brand-info">
+          <span class="brand-title">Tuần 12: Data Management</span>
+          <span class="brand-subtitle">Huỳnh Hữu Phước - 125000155 (LHU)</span>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Trang chủ</a></li>
+        <li><a href="hoatdong1.html" class="nav-link"><i class="fas fa-user-tag"></i> HĐ 1</a></li>
+        <li><a href="hoatdong2.html" class="nav-link"><i class="fas fa-filter"></i> HĐ 2</a></li>
+        <li><a href="hoatdong3.html" class="nav-link active"><i class="fas fa-magic"></i> HĐ 3</a></li>
+        <li><a href="../challenge/the_smart_catalog.html" class="nav-link nav-btn-highlight"><i class="fas fa-store"></i> Smart Catalog</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="container">
+    <div class="page-header">
+      <div class="header-badge"><i class="fas fa-magic"></i> In-Class Activity 03 (30 phút)</div>
+      <h1 class="page-title">Hoạt động 3: "Dynamic UI Render" - Đổ dữ liệu tự động</h1>
+      <p class="page-desc">
+        Kết hợp kiến thức DOM (Tuần 10) và duyệt mảng (Tuần 12) để tự động sinh ra hàng loạt thẻ giao diện từ mảng dữ liệu Objects. So sánh hiệu năng giữa <code>map() + innerHTML</code> và <code>forEach() + createElement()</code>.
+      </p>
+    </div>
+
+    <!-- Render Method Switcher & Live Stats -->
+    <div class="card" style="margin-bottom: 2rem;">
+      <div class="card-body">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.25rem;">
+          <div>
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--slate-500); text-transform: uppercase; display: block; margin-bottom: 0.35rem;">Phương pháp Render hiện tại:</span>
+            <div style="display: flex; gap: 0.5rem;" id="method-switcher">
+              <button class="btn btn-primary btn-sm method-btn active" data-method="map">
+                <i class="fas fa-bolt"></i> Cách 1: map().join('') + innerHTML
+              </button>
+              <button class="btn btn-secondary btn-sm method-btn" data-method="forEach">
+                <i class="fas fa-cubes"></i> Cách 2: forEach() + createElement()
+              </button>
+            </div>
+          </div>
+
+          <!-- Execution Stats -->
+          <div style="display: flex; align-items: center; gap: 1.5rem; background: var(--slate-50); padding: 0.75rem 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--slate-200);">
+            <div>
+              <span style="font-size: 0.75rem; color: var(--slate-500); display: block;">Thời gian thực thi:</span>
+              <strong id="stat-render-time" style="color: var(--success); font-family: var(--font-mono); font-size: 1rem;">0.00 ms</strong>
+            </div>
+            <div>
+              <span style="font-size: 0.75rem; color: var(--slate-500); display: block;">Số thẻ được tạo:</span>
+              <strong id="stat-cards-count" style="color: var(--primary); font-family: var(--font-mono); font-size: 1rem;">0 thẻ</strong>
+            </div>
+            <button class="btn btn-sm btn-outline" id="btn-re-render"><i class="fas fa-redo"></i> Render lại</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Item to Array (Demonstrating Reactivity) -->
+    <div class="card" style="margin-bottom: 2rem;">
+      <div class="card-header">
+        <div class="card-title"><i class="fas fa-plus-circle" style="color: var(--success);"></i> Thêm khóa học mới vào mảng dữ liệu (Data Drive UI)</div>
+        <span class="badge badge-primary"><i class="fas fa-database"></i> Tự động cập nhật UI</span>
+      </div>
+      <div class="card-body">
+        <form id="add-course-form" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) auto; gap: 1rem; align-items: flex-end;">
+          <div>
+            <label class="form-label" for="course-title">Tên khóa học:</label>
+            <input type="text" id="course-title" class="form-control" placeholder="Ví dụ: Lập trình Vue.js 3" required>
+          </div>
+          <div>
+            <label class="form-label" for="course-instructor">Giảng viên / Tác giả:</label>
+            <input type="text" id="course-instructor" class="form-control" placeholder="Ví dụ: Huỳnh Hữu Phước" required>
+          </div>
+          <div>
+            <label class="form-label" for="course-price">Học phí (VNĐ):</label>
+            <input type="number" id="course-price" class="form-control" placeholder="Ví dụ: 499000" min="0" step="10000" required>
+          </div>
+          <div>
+            <label class="form-label" for="course-level">Cấp độ:</label>
+            <select id="course-level" class="form-control form-select">
+              <option value="Cơ bản">Cơ bản</option>
+              <option value="Trung cấp" selected>Trung cấp</option>
+              <option value="Nâng cao">Nâng cao</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-success" style="height: 42px;">
+            <i class="fas fa-plus"></i> Thêm vào Mảng
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Dynamic Render Container -->
+    <div style="margin-bottom: 2.5rem;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+        <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--dark);">
+          <i class="fas fa-layer-group" style="color: var(--primary);"></i> Kết quả đổ dữ liệu tự động ra DOM:
+        </h3>
+        <span class="badge badge-secondary" id="active-method-label">Phương pháp: map()</span>
+      </div>
+      <div class="product-grid" id="dynamic-cards-container">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+
+    <!-- Comparison & Technical Insight -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+      
+      <div class="code-panel">
+        <div class="code-header">
+          <span class="code-title">Cách 1: map().join('') (Khuyên dùng)</span>
+          <span class="badge badge-success">Clean & Fast</span>
+        </div>
+        <pre class="code-content"><code>// Tạo mảng chuỗi HTML và gán vào innerHTML 1 lần duy nhất
+const html = courses.map(course => `
+  &lt;div class="card"&gt;
+    &lt;h4&gt;${course.title}&lt;/h4&gt;
+    &lt;p&gt;GV: ${course.instructor}&lt;/p&gt;
+    &lt;span&gt;${formatVND(course.price)}&lt;/span&gt;
+  &lt;/div&gt;
+`).join('');
+
+container.innerHTML = html;</code></pre>
+      </div>
+
+      <div class="code-panel">
+        <div class="code-header">
+          <span class="code-title">Cách 2: forEach() + createElement()</span>
+          <span class="badge badge-secondary">DOM Manipulation</span>
+        </div>
+        <pre class="code-content"><code>// Duyệt từng phần tử và tạo Element thủ công
+container.innerHTML = '';
+courses.forEach(course => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    &lt;h4&gt;${course.title}&lt;/h4&gt;
+    &lt;p&gt;GV: ${course.instructor}&lt;/p&gt;
+    &lt;span&gt;${formatVND(course.price)}&lt;/span&gt;
+  `;
+  container.appendChild(card);
+});</code></pre>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <i class="fas fa-laptop-code"></i> Đại học Lạc Hồng · Khoa Công Nghệ Thông Tin
+      </div>
+      <div>Sinh viên: <strong>Huỳnh Hữu Phước</strong> (MSSV: 125000155) · Tuần 12</div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    // Dữ liệu mẫu ban đầu: Danh sách các khóa học công nghệ
+    const initialCourses = [
+      {
+        id: 1,
+        title: "Lập trình Web Front-end với HTML5, CSS3 & Modern JS",
+        instructor: "ThS. Huỳnh Hữu Phước",
+        price: 499000,
+        level: "Cơ bản",
+        studentsCount: 1420,
+        image: "https://images.unsplash.com/photo-1547658719-da2b51169166?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 2,
+        title: "Làm chủ Object & Mảng Nâng Cao trong JavaScript ES6+",
+        instructor: "Khoa CNTT - Đại học Lạc Hồng",
+        price: 399000,
+        level: "Trung cấp",
+        studentsCount: 890,
+        image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 3,
+        title: "Xây dựng Single Page Application với React & Tailwind",
+        instructor: "Phước Huỳnh Tech",
+        price: 699000,
+        level: "Nâng cao",
+        studentsCount: 2150,
+        image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 4,
+        title: "Tối ưu hóa UI/UX và Thiết kế Responsive Design",
+        instructor: "Lạc Hồng Web Design Team",
+        price: 350000,
+        level: "Cơ bản",
+        studentsCount: 1780,
+        image: "https://images.unsplash.com/photo-1581291518655-9523c932edcf?w=500&auto=format&fit=crop&q=60"
+      }
+    ];
+
+    let currentCourses = [...initialCourses];
+    let activeMethod = 'map'; // 'map' hoặc 'forEach'
+
+    const container = document.getElementById('dynamic-cards-container');
+
+    // Tạo HTML template cho 1 khóa học
+    function getCourseCardHTML(c) {
+      let badgeClass = 'badge-primary';
+      if (c.level === 'Cơ bản') badgeClass = 'badge-success';
+      if (c.level === 'Nâng cao') badgeClass = 'badge-danger';
+
+      return `
+        <div class="product-card">
+          <div class="product-img-wrapper">
+            <img src="${c.image}" alt="${c.title}" class="product-img" onerror="this.src='https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=500&auto=format&fit=crop&q=60'">
+            <span class="product-category-tag"><i class="fas fa-layer-group"></i> ${c.level}</span>
+          </div>
+          <div class="product-info">
+            <h4 class="product-title" title="${c.title}">${c.title}</h4>
+            <p style="font-size: 0.85rem; color: var(--slate-500); margin-bottom: 0.75rem;">
+              <i class="fas fa-chalkboard-teacher" style="color: var(--secondary);"></i> ${c.instructor}
+            </p>
+            <div style="font-size: 0.8rem; color: var(--slate-500); margin-bottom: 0.75rem;">
+              <i class="fas fa-user-friends" style="color: var(--primary);"></i> ${c.studentsCount.toLocaleString('vi-VN')} học viên
+            </div>
+            <div class="product-price-box">
+              <span class="price-current">${formatVND(c.price)}</span>
+            </div>
+            <button class="btn btn-outline btn-sm" style="width: 100%;" onclick="showToast('Đã ghi danh khóa: ${c.title}', 'success')">
+              <i class="fas fa-graduation-cap"></i> Ghi danh học ngay
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Render bằng cách 1: map().join('')
+    function renderWithMap() {
+      const startTime = performance.now();
+      const htmlString = currentCourses.map(course => getCourseCardHTML(course)).join('');
+      container.innerHTML = htmlString;
+      const endTime = performance.now();
+      updateStats(endTime - startTime);
+    }
+
+    // Render bằng cách 2: forEach() + createElement()
+    function renderWithForEach() {
+      const startTime = performance.now();
+      container.innerHTML = '';
+      currentCourses.forEach(course => {
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = getCourseCardHTML(course);
+        // Lấy node con đầu tiên là .product-card
+        container.appendChild(wrapper.firstElementChild);
+      });
+      const endTime = performance.now();
+      updateStats(endTime - startTime);
+    }
+
+    // Điều phối render
+    function executeRender() {
+      if (activeMethod === 'map') {
+        renderWithMap();
+        document.getElementById('active-method-label').textContent = 'Phương pháp: map().join("") + innerHTML';
+      } else {
+        renderWithForEach();
+        document.getElementById('active-method-label').textContent = 'Phương pháp: forEach() + appendChild()';
+      }
+    }
+
+    function updateStats(duration) {
+      document.getElementById('stat-render-time').textContent = `${duration.toFixed(2)} ms`;
+      document.getElementById('stat-cards-count').textContent = `${currentCourses.length} thẻ`;
+    }
+
+    // Chuyển đổi phương pháp render
+    const methodButtons = document.querySelectorAll('.method-btn');
+    methodButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        methodButtons.forEach(b => {
+          b.classList.remove('active', 'btn-primary');
+          b.classList.add('btn-secondary');
+        });
+        btn.classList.remove('btn-secondary');
+        btn.classList.add('active', 'btn-primary');
+
+        activeMethod = btn.getAttribute('data-method');
+        executeRender();
+        showToast(`Đã chuyển sang phương thức: ${activeMethod}`, 'info');
+      });
+    });
+
+    // Nút Render lại
+    document.getElementById('btn-re-render').addEventListener('click', () => {
+      executeRender();
+      showToast('Đã tính toán và render lại UI!', 'primary');
+    });
+
+    // Form thêm khóa học mới
+    document.getElementById('add-course-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const title = document.getElementById('course-title').value.trim();
+      const instructor = document.getElementById('course-instructor').value.trim();
+      const price = parseInt(document.getElementById('course-price').value) || 0;
+      const level = document.getElementById('course-level').value;
+
+      const newCourse = {
+        id: Date.now(),
+        title,
+        instructor,
+        price,
+        level,
+        studentsCount: 1,
+        image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500&auto=format&fit=crop&q=60"
+      };
+
+      currentCourses.unshift(newCourse); // Thêm lên đầu mảng
+      executeRender();
+
+      // Reset form
+      document.getElementById('course-title').value = '';
+      document.getElementById('course-instructor').value = '';
+      document.getElementById('course-price').value = '';
+
+      showToast(`Đã thêm thành công: "${title}"`, 'success');
+      console.log("Mảng courses sau khi thêm:", currentCourses);
+    });
+
+    // Chạy render khởi tạo
+    executeRender();
+    console.log("Hoạt động 3 - Dynamic UI Render sẵn sàng!");
+  </script>
+</body>
+</html>

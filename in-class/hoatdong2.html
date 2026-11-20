@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hoạt động 2: The Product Filter - Bộ lọc sản phẩm | Tuần 12</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-brand">
+        <div class="brand-icon"><i class="fas fa-cubes"></i></div>
+        <div class="brand-info">
+          <span class="brand-title">Tuần 12: Data Management</span>
+          <span class="brand-subtitle">Huỳnh Hữu Phước - 125000155 (LHU)</span>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Trang chủ</a></li>
+        <li><a href="hoatdong1.html" class="nav-link"><i class="fas fa-user-tag"></i> HĐ 1</a></li>
+        <li><a href="hoatdong2.html" class="nav-link active"><i class="fas fa-filter"></i> HĐ 2</a></li>
+        <li><a href="hoatdong3.html" class="nav-link"><i class="fas fa-magic"></i> HĐ 3</a></li>
+        <li><a href="../challenge/the_smart_catalog.html" class="nav-link nav-btn-highlight"><i class="fas fa-store"></i> Smart Catalog</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="container">
+    <div class="page-header">
+      <div class="header-badge"><i class="fas fa-filter"></i> In-Class Activity 02 (45 phút)</div>
+      <h1 class="page-title">Hoạt động 2: "The Product Filter" - Bộ lọc sản phẩm hiện đại</h1>
+      <p class="page-desc">
+        Sử dụng hàm <code>Array.prototype.filter()</code> để trích xuất tập con sản phẩm theo điều kiện và hàm <code>Array.prototype.map()</code> để trích xuất tên hoặc tạo cấu trúc HTML hiển thị ra màn hình.
+      </p>
+    </div>
+
+    <!-- Filter Control Bar -->
+    <div class="card" style="margin-bottom: 2rem;">
+      <div class="card-body">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;">
+          <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;" id="filter-buttons">
+            <button class="btn btn-primary btn-sm filter-btn active" data-filter="all">
+              <i class="fas fa-list"></i> Tất cả (<span id="count-all">10</span>)
+            </button>
+            <button class="btn btn-secondary btn-sm filter-btn" data-filter="sale">
+              <i class="fas fa-tags" style="color: var(--danger);"></i> Đang giảm giá (<span id="count-sale">0</span>)
+            </button>
+            <button class="btn btn-secondary btn-sm filter-btn" data-filter="over1m">
+              <i class="fas fa-arrow-up" style="color: var(--primary);"></i> Giá > 1 Triệu (<span id="count-over1m">0</span>)
+            </button>
+            <button class="btn btn-secondary btn-sm filter-btn" data-filter="under500k">
+              <i class="fas fa-arrow-down" style="color: var(--success);"></i> Giá < 500k (<span id="count-under500k">0</span>)
+            </button>
+          </div>
+
+          <button class="btn btn-warning btn-sm" id="btn-run-prompt">
+            <i class="fas fa-robot"></i> Chạy Prompt Mẫu: filter(> 1tr) & map(tên)
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Result Statistics Banner -->
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem;">
+      <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--dark);" id="filter-status-heading">
+        <i class="fas fa-box-open" style="color: var(--primary);"></i> Danh sách hiển thị: <span id="current-display-count">10</span> sản phẩm
+      </h3>
+      <span class="badge badge-primary" id="applied-criteria-badge">Tiêu chí: Tất cả sản phẩm</span>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="product-grid" id="product-grid-container" style="margin-bottom: 2.5rem;">
+      <!-- Injected via JavaScript using map() -->
+    </div>
+
+    <!-- Educational Code & Console Simulation -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+      
+      <!-- Interactive Console Simulator -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-terminal"></i> Console.log() Output của map & filter</div>
+          <button class="btn btn-sm btn-outline" id="btn-clear-console"><i class="fas fa-trash"></i> Xóa log</button>
+        </div>
+        <div class="card-body">
+          <div id="simulated-console" class="console-output">
+            <!-- Simulated console lines -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Code Inspector -->
+      <div class="code-panel">
+        <div class="code-header">
+          <div class="window-dots">
+            <div class="dot dot-red"></div>
+            <div class="dot dot-yellow"></div>
+            <div class="dot dot-green"></div>
+          </div>
+          <span class="code-title">filter_and_map_logic.js</span>
+          <button class="btn btn-sm btn-secondary" onclick="copyToClipboard(document.getElementById('code-snippet').innerText)">
+            <i class="far fa-copy"></i> Copy
+          </button>
+        </div>
+        <pre class="code-content" id="code-snippet"><code>// 1. Mẫu dữ liệu 10 sản phẩm
+const products = [
+  { id: 1, ten: "Chuột Logitech M331", gia: 350000, onSale: true },
+  { id: 2, ten: "Bàn phím cơ DareU EK87", gia: 550000, onSale: false },
+  ...
+];
+
+// 2. Lọc sản phẩm đang giảm giá (Hoạt động 2)
+const sanPhamGiamGia = products.filter(sp => sp.onSale === true);
+
+// 3. Prompt mẫu: Lọc giá > 1 triệu & map in tên
+const sanPhamDatTien = products.filter(sp => sp.gia > 1000000);
+const tenSanPham = sanPhamDatTien.map(sp => sp.ten);
+console.log("Tên các sản phẩm > 1 triệu:", tenSanPham);</code></pre>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <i class="fas fa-laptop-code"></i> Đại học Lạc Hồng · Khoa Công Nghệ Thông Tin
+      </div>
+      <div>Sinh viên: <strong>Huỳnh Hữu Phước</strong> (MSSV: 125000155) · Tuần 12</div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    const simConsole = new ConsoleSimulator('simulated-console');
+
+    // 10 Object sản phẩm theo giáo trình
+    const products = [
+      {
+        id: 1,
+        ten: "Chuột không dây Logitech M331 Silent",
+        gia: 350000,
+        giaGoc: 450000,
+        onSale: true,
+        danhMuc: "Phụ kiện",
+        hinhAnh: "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 2,
+        ten: "Bàn phím cơ DareU EK87 Tenkeyless",
+        gia: 550000,
+        giaGoc: 550000,
+        onSale: false,
+        danhMuc: "Bàn phím",
+        hinhAnh: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 3,
+        ten: "Tai nghe Gaming Razer BlackShark V2",
+        gia: 1290000,
+        giaGoc: 1690000,
+        onSale: true,
+        danhMuc: "Âm thanh",
+        hinhAnh: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 4,
+        ten: "Ổ cứng SSD Samsung 980 NVMe 500GB",
+        gia: 1450000,
+        giaGoc: 1750000,
+        onSale: true,
+        danhMuc: "Linh kiện",
+        hinhAnh: "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 5,
+        ten: "Màn hình LG 24MP400-B 24 inch IPS",
+        gia: 2190000,
+        giaGoc: 2190000,
+        onSale: false,
+        danhMuc: "Màn hình",
+        hinhAnh: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 6,
+        ten: "USB SanDisk 64GB Ultra Flair CZ73",
+        gia: 1990000 * 0.1, // 199k
+        giaGoc: 250000,
+        onSale: true,
+        danhMuc: "Lưu trữ",
+        hinhAnh: "https://images.unsplash.com/photo-1622434641406-a158123450f9?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 7,
+        ten: "Loa Bluetooth JBL Go 3 Chống nước",
+        gia: 890000,
+        giaGoc: 890000,
+        onSale: false,
+        danhMuc: "Âm thanh",
+        hinhAnh: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 8,
+        ten: "Đế tản nhiệt Laptop Cooler Master Notepal",
+        gia: 420000,
+        giaGoc: 550000,
+        onSale: true,
+        danhMuc: "Phụ kiện",
+        hinhAnh: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 9,
+        ten: "Webcam Full HD Logitech C922 Pro Stream",
+        gia: 1850000,
+        giaGoc: 2350000,
+        onSale: true,
+        danhMuc: "Phụ kiện",
+        hinhAnh: "https://images.unsplash.com/photo-1588508065123-287b28e013da?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 10,
+        ten: "Củ sạc nhanh Anker 65W GaN Nano II",
+        gia: 950000,
+        giaGoc: 950000,
+        onSale: false,
+        danhMuc: "Phụ kiện",
+        hinhAnh: "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=500&auto=format&fit=crop&q=60"
+      }
+    ];
+
+    // Cập nhật số lượng đếm trên các nút bộ lọc
+    function updateBadgeCounts() {
+      document.getElementById('count-all').textContent = products.length;
+      document.getElementById('count-sale').textContent = products.filter(p => p.onSale).length;
+      document.getElementById('count-over1m').textContent = products.filter(p => p.gia > 1000000).length;
+      document.getElementById('count-under500k').textContent = products.filter(p => p.gia < 500000).length;
+    }
+
+    // Render danh sách sản phẩm bằng map()
+    function renderProducts(items) {
+      const container = document.getElementById('product-grid-container');
+      document.getElementById('current-display-count').textContent = items.length;
+
+      if (items.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; background: white; border-radius: var(--radius-lg); border: 1px dashed var(--slate-300);">
+            <i class="fas fa-box-open" style="font-size: 3rem; color: var(--slate-300); margin-bottom: 1rem;"></i>
+            <h4 style="color: var(--slate-700);">Không tìm thấy sản phẩm nào khớp điều kiện!</h4>
+          </div>
+        `;
+        return;
+      }
+
+      // Sử dụng map() để sinh ra mảng thẻ HTML và nối chuỗi bằng join('')
+      const cardsHtml = items.map(sp => `
+        <div class="product-card">
+          <div class="product-img-wrapper">
+            <img src="${sp.hinhAnh}" alt="${sp.ten}" class="product-img" onerror="this.src='https://images.unsplash.com/photo-1526738549149-8e07eca6c147?w=500&auto=format&fit=crop&q=60'">
+            ${sp.onSale ? '<span class="product-badge-sale"><i class="fas fa-fire"></i> SALE</span>' : ''}
+            <span class="product-category-tag">${sp.danhMuc}</span>
+          </div>
+          <div class="product-info">
+            <h4 class="product-title" title="${sp.ten}">${sp.ten}</h4>
+            <div class="product-price-box">
+              <span class="price-current">${formatVND(sp.gia)}</span>
+              ${sp.onSale ? `<span class="price-original">${formatVND(sp.giaGoc)}</span>` : ''}
+            </div>
+            <div style="margin-top: auto;">
+              <span class="badge ${sp.onSale ? 'badge-danger' : 'badge-secondary'}">
+                <i class="fas ${sp.onSale ? 'fa-tag' : 'fa-check'}"></i> ${sp.onSale ? 'Đang giảm giá' : 'Giá niêm yết'}
+              </span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      container.innerHTML = cardsHtml;
+    }
+
+    // Xử lý bộ lọc
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => {
+          b.classList.remove('active', 'btn-primary');
+          b.classList.add('btn-secondary');
+        });
+        btn.classList.remove('btn-secondary');
+        btn.classList.add('active', 'btn-primary');
+
+        const filterType = btn.getAttribute('data-filter');
+        let filtered = [];
+
+        if (filterType === 'all') {
+          filtered = products;
+          document.getElementById('applied-criteria-badge').textContent = 'Tiêu chí: Tất cả sản phẩm';
+          simConsole.log(`[filter(all)]: Lấy tất cả ${filtered.length} sản phẩm`, 'info');
+        } else if (filterType === 'sale') {
+          // Hàm filter() sản phẩm giảm giá theo yêu cầu Hoạt động 2
+          filtered = products.filter(sp => sp.onSale === true);
+          document.getElementById('applied-criteria-badge').textContent = 'Tiêu chí: Đang giảm giá (onSale: true)';
+          simConsole.log(`[filter(sp => sp.onSale === true)]: Tìm thấy ${filtered.length} sản phẩm giảm giá`, 'success');
+        } else if (filterType === 'over1m') {
+          // Hàm filter() sản phẩm giá > 1 triệu theo prompt mẫu
+          filtered = products.filter(sp => sp.gia > 1000000);
+          document.getElementById('applied-criteria-badge').textContent = 'Tiêu chí: Giá > 1.000.000 đ';
+          simConsole.log(`[filter(sp => sp.gia > 1.000.000)]: Tìm thấy ${filtered.length} sản phẩm`, 'info');
+        } else if (filterType === 'under500k') {
+          filtered = products.filter(sp => sp.gia < 500000);
+          document.getElementById('applied-criteria-badge').textContent = 'Tiêu chí: Giá < 500.000 đ';
+          simConsole.log(`[filter(sp => sp.gia < 500.000)]: Tìm thấy ${filtered.length} sản phẩm`, 'info');
+        }
+
+        renderProducts(filtered);
+        console.log(`Kết quả lọc [${filterType}]:`, filtered);
+      });
+    });
+
+    // Xử lý nút Chạy Prompt Mẫu
+    document.getElementById('btn-run-prompt').addEventListener('click', () => {
+      // 1. Dùng filter lọc giá > 1 triệu
+      const sanPhamDatTien = products.filter(sp => sp.gia > 1000000);
+      // 2. Dùng map lấy danh sách tên
+      const danhSachTen = sanPhamDatTien.map(sp => sp.ten);
+
+      simConsole.log("--- CHẠY PROMPT MẪU ---", "warn");
+      simConsole.log(`1. filter(sp => sp.gia > 1.000.000): Tìm thấy ${sanPhamDatTien.length} sản phẩm.`, "info");
+      simConsole.log(`2. map(sp => sp.ten): Danh sách tên:`, "success");
+      danhSachTen.forEach((ten, idx) => {
+        simConsole.log(`   [${idx + 1}] ${ten}`, "info");
+      });
+
+      console.log("Danh sách sản phẩm > 1 triệu:", sanPhamDatTien);
+      console.log("Mảng tên (từ map):", danhSachTen);
+
+      renderProducts(sanPhamDatTien);
+      document.getElementById('applied-criteria-badge').textContent = 'Prompt Mẫu: Giá > 1.000.000 đ & map(tên)';
+      showToast(`Đã lọc ra ${sanPhamDatTien.length} sản phẩm và map() tên!`, 'warning');
+    });
+
+    document.getElementById('btn-clear-console').addEventListener('click', () => {
+      simConsole.clear();
+      showToast('Đã dọn sạch console log', 'info');
+    });
+
+    // Khởi chạy ban đầu
+    updateBadgeCounts();
+    renderProducts(products);
+    simConsole.log("Tải dữ liệu 10 sản phẩm thành công. Hãy bấm các nút lọc phía trên!", "info");
+  </script>
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hoạt động 1: Object Identity - Định danh đối tượng | Tuần 12</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-brand">
+        <div class="brand-icon"><i class="fas fa-cubes"></i></div>
+        <div class="brand-info">
+          <span class="brand-title">Tuần 12: Data Management</span>
+          <span class="brand-subtitle">Huỳnh Hữu Phước - 125000155 (LHU)</span>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Trang chủ</a></li>
+        <li><a href="hoatdong1.html" class="nav-link active"><i class="fas fa-user-tag"></i> HĐ 1</a></li>
+        <li><a href="hoatdong2.html" class="nav-link"><i class="fas fa-filter"></i> HĐ 2</a></li>
+        <li><a href="hoatdong3.html" class="nav-link"><i class="fas fa-magic"></i> HĐ 3</a></li>
+        <li><a href="../challenge/the_smart_catalog.html" class="nav-link nav-btn-highlight"><i class="fas fa-store"></i> Smart Catalog</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="container">
+    <div class="page-header">
+      <div class="header-badge"><i class="fas fa-graduation-cap"></i> In-Class Activity 01 (30 phút)</div>
+      <h1 class="page-title">Hoạt động 1: "Object Identity" - Định danh đối tượng</h1>
+      <p class="page-desc">
+        Khai báo Object chứa thông tin bản thân (tên, tuổi, chuyên ngành, kỹ năng). Vận dụng phương thức nội tại (method) và từ khóa <code>this</code> để tự động tính năm sinh và in lời giới thiệu ra màn hình.
+      </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+      
+      <!-- Interactive Profile Card -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-id-card" style="color: var(--primary);"></i> Thông tin Đối tượng (Object State)</div>
+          <span class="badge badge-success"><i class="fas fa-check"></i> Đang hoạt động</span>
+        </div>
+        <div class="card-body">
+          <div style="display: flex; align-items: center; gap: 1.25rem; margin-bottom: 1.5rem;">
+            <div style="width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; box-shadow: 0 4px 12px var(--primary-glow);">
+              <i class="fas fa-user-graduate"></i>
+            </div>
+            <div>
+              <h3 id="display-name" style="font-size: 1.25rem; font-weight: 800; color: var(--dark);">Huỳnh Hữu Phước</h3>
+              <p style="color: var(--slate-500); font-size: 0.85rem;"><i class="fas fa-id-badge"></i> MSSV: 125000155</p>
+              <span class="badge badge-primary" id="display-major">Công nghệ Thông tin</span>
+            </div>
+          </div>
+
+          <div style="background-color: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 1rem; margin-bottom: 1.25rem;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.9rem;">
+              <div>
+                <span style="color: var(--slate-500);">Tuổi:</span>
+                <strong id="display-age" style="color: var(--dark); margin-left: 0.35rem;">20 tuổi</strong>
+              </div>
+              <div>
+                <span style="color: var(--slate-500);">Năm sinh (tính tự động):</span>
+                <strong id="display-birthyear" style="color: var(--primary); margin-left: 0.35rem;">2004</strong>
+              </div>
+            </div>
+            <div style="margin-top: 0.75rem;">
+              <span style="color: var(--slate-500); font-size: 0.85rem; display: block; margin-bottom: 0.35rem;">Danh sách kỹ năng (Array in Object):</span>
+              <div id="skills-container" style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
+                <!-- Skills chips injected via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Controls -->
+          <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+            <button class="btn btn-primary" id="btn-call-intro">
+              <i class="fas fa-bullhorn"></i> Gọi method user.gioiThieu()
+            </button>
+            <button class="btn btn-secondary" id="btn-calc-birth">
+              <i class="fas fa-calculator"></i> Gọi method user.tinhNamSinh()
+            </button>
+            <button class="btn btn-outline" id="btn-console-log">
+              <i class="fas fa-terminal"></i> In đối tượng ra console.log()
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Update Object Attributes Form -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-sliders-h" style="color: var(--secondary);"></i> Chỉnh sửa thuộc tính Object</div>
+        </div>
+        <div class="card-body">
+          <form id="edit-user-form">
+            <div class="form-group">
+              <label class="form-label" for="input-name">Họ và tên (user.ten):</label>
+              <input type="text" id="input-name" class="form-control" value="Huỳnh Hữu Phước" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="input-age">Tuổi (user.tuoi):</label>
+              <input type="number" id="input-age" class="form-control" value="20" min="1" max="100" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="input-major">Chuyên ngành (user.chuyenNganh):</label>
+              <input type="text" id="input-major" class="form-control" value="Kỹ thuật Phần mềm / Web Dev" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="input-new-skill">Thêm kỹ năng mới vào mảng user.kyNang:</label>
+              <div style="display: flex; gap: 0.5rem;">
+                <input type="text" id="input-new-skill" class="form-control" placeholder="Ví dụ: React, TypeScript, Node.js">
+                <button type="button" class="btn btn-secondary" id="btn-add-skill"><i class="fas fa-plus"></i></button>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-success" style="width: 100%;">
+              <i class="fas fa-sync-alt"></i> Cập nhật Object & Tính lại Năm sinh
+            </button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Live Console Simulator & Code Explanation -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+      
+      <!-- Visual Console Box -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-terminal"></i> Trực quan hóa Console Output</div>
+          <button class="btn btn-sm btn-outline" id="btn-clear-console"><i class="fas fa-trash"></i> Xóa log</button>
+        </div>
+        <div class="card-body">
+          <div id="simulated-console" class="console-output">
+            <!-- Simulated logs -->
+          </div>
+          <p style="font-size: 0.78rem; color: var(--slate-500); margin-top: 0.5rem;">
+            <i class="fas fa-info-circle"></i> Kết quả cũng được in đồng thời vào Console thực tế của trình duyệt (Nhấn <strong>F12 &gt; Tab Console</strong> để kiểm tra).
+          </p>
+        </div>
+      </div>
+
+      <!-- Vibe Coding Prompt & Source Code -->
+      <div class="code-panel">
+        <div class="code-header">
+          <div class="window-dots">
+            <div class="dot dot-red"></div>
+            <div class="dot dot-yellow"></div>
+            <div class="dot dot-green"></div>
+          </div>
+          <span class="code-title">object_identity.js (Vibe Coding with AI)</span>
+          <button class="btn btn-sm btn-secondary" onclick="copyToClipboard(document.getElementById('code-source').innerText)">
+            <i class="far fa-copy"></i> Copy
+          </button>
+        </div>
+        <pre class="code-content" id="code-source"><code>// 1. Khai báo Object User hoàn chỉnh
+const user = {
+  ten: "Huỳnh Hữu Phước",
+  mssv: "125000155",
+  tuoi: 20,
+  chuyenNganh: "Công nghệ Thông tin",
+  kyNang: ["HTML5", "CSS3", "JavaScript", "Responsive Design", "Git"],
+  
+  // 2. Phương thức tự tính năm sinh (Vibe Coding prompt)
+  tinhNamSinh: function() {
+    const namHienTai = new Date().getFullYear();
+    return namHienTai - this.tuoi;
+  },
+
+  // 3. Phương thức tự giới thiệu bản thân
+  gioiThieu: function() {
+    return `Xin chào! Tôi là ${this.ten}, ${this.tuoi} tuổi (sinh năm ${this.tinhNamSinh()}), chuyên ngành ${this.chuyenNganh}. Kỹ năng: ${this.kyNang.join(', ')}.`;
+  }
+};
+
+// Gọi phương thức và in kết quả:
+console.log(user.gioiThieu());
+console.log("Năm sinh tính được:", user.tinhNamSinh());</code></pre>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <i class="fas fa-laptop-code"></i> Đại học Lạc Hồng · Khoa Công Nghệ Thông Tin
+      </div>
+      <div>Sinh viên: <strong>Huỳnh Hữu Phước</strong> (MSSV: 125000155) · Tuần 12</div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    // Console Simulator instance
+    const simConsole = new ConsoleSimulator('simulated-console');
+
+    // 1. Khởi tạo Object User
+    const user = {
+      ten: "Huỳnh Hữu Phước",
+      mssv: "125000155",
+      tuoi: 20,
+      chuyenNganh: "Công nghệ Thông tin",
+      kyNang: ["HTML5", "CSS3", "JavaScript", "Git & GitHub", "Object-Oriented Logic"],
+      
+      // Vibe Coding: Thêm phương thức tự tính năm sinh dựa trên thuộc tính tuoi và Date()
+      tinhNamSinh: function() {
+        const namHienTai = new Date().getFullYear();
+        return namHienTai - this.tuoi;
+      },
+
+      // Phương thức tự giới thiệu bản thân
+      gioiThieu: function() {
+        return `Xin chào! Tôi là ${this.ten}, sinh viên MSSV ${this.mssv}, hiện ${this.tuoi} tuổi (sinh năm ${this.tinhNamSinh()}), chuyên ngành ${this.chuyenNganh}. Kỹ năng nổi bật: ${this.kyNang.join(', ')}.`;
+      }
+    };
+
+    // Render hàm cập nhật giao diện
+    function updateUI() {
+      document.getElementById('display-name').textContent = user.ten;
+      document.getElementById('display-age').textContent = `${user.tuoi} tuổi`;
+      document.getElementById('display-major').textContent = user.chuyenNganh;
+      document.getElementById('display-birthyear').textContent = user.tinhNamSinh();
+
+      const skillsContainer = document.getElementById('skills-container');
+      skillsContainer.innerHTML = '';
+      user.kyNang.forEach(skill => {
+        const chip = document.createElement('span');
+        chip.className = 'badge badge-secondary';
+        chip.innerHTML = `<i class="fas fa-code"></i> ${skill}`;
+        skillsContainer.appendChild(chip);
+      });
+    }
+
+    // Gắn sự kiện
+    document.getElementById('btn-call-intro').addEventListener('click', () => {
+      const intro = user.gioiThieu();
+      console.log("[user.gioiThieu()]:", intro);
+      simConsole.log(`[user.gioiThieu()]: "${intro}"`, 'info');
+      showToast('Đã gọi user.gioiThieu() thành công!', 'success');
+    });
+
+    document.getElementById('btn-calc-birth').addEventListener('click', () => {
+      const birthYear = user.tinhNamSinh();
+      const msg = `Năm hiện tại: ${new Date().getFullYear()} - Tuổi: ${user.tuoi} => Năm sinh: ${birthYear}`;
+      console.log("[user.tinhNamSinh()]:", birthYear);
+      simConsole.log(`[user.tinhNamSinh()]: ${msg}`, 'success');
+      showToast(`Năm sinh tính tự động: ${birthYear}`, 'info');
+    });
+
+    document.getElementById('btn-console-log').addEventListener('click', () => {
+      console.log("Object User:", user);
+      simConsole.log(`Đối tượng user = {\n  ten: "${user.ten}",\n  tuoi: ${user.tuoi},\n  chuyenNganh: "${user.chuyenNganh}",\n  kyNang: [${user.kyNang.map(s => `"${s}"`).join(', ')}]\n}`, 'info');
+      showToast('Đã in user Object ra console.log()!', 'primary');
+    });
+
+    document.getElementById('btn-clear-console').addEventListener('click', () => {
+      simConsole.clear();
+      showToast('Đã làm sạch màn hình console', 'info');
+    });
+
+    // Thêm kỹ năng mới
+    document.getElementById('btn-add-skill').addEventListener('click', () => {
+      const input = document.getElementById('input-new-skill');
+      const val = input.value.trim();
+      if (val) {
+        user.kyNang.push(val);
+        input.value = '';
+        updateUI();
+        simConsole.log(`Đã thêm kỹ năng mới vào user.kyNang: "${val}"`, 'success');
+        showToast(`Đã thêm: ${val}`, 'success');
+      }
+    });
+
+    // Cập nhật form
+    document.getElementById('edit-user-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      user.ten = document.getElementById('input-name').value.trim();
+      user.tuoi = parseInt(document.getElementById('input-age').value) || 20;
+      user.chuyenNganh = document.getElementById('input-major').value.trim();
+      updateUI();
+      simConsole.log(`Đã cập nhật Object user! Năm sinh mới: ${user.tinhNamSinh()}`, 'success');
+      showToast('Cập nhật thuộc tính Object thành công!', 'success');
+    });
+
+    // Khởi tạo ban đầu
+    updateUI();
+    simConsole.log("Khởi tạo thành công Object user. Bấm các nút chức năng để trải nghiệm!", "success");
+    console.log("Khởi tạo Object User Hoạt động 1:", user);
+  </script>
+</body>
+</html>

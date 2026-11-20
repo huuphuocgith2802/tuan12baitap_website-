@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bài 6: Xóa phần tử khỏi danh sách | Homework Tuần 12</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-brand">
+        <div class="brand-icon"><i class="fas fa-cubes"></i></div>
+        <div class="brand-info">
+          <span class="brand-title">Tuần 12: Data Management</span>
+          <span class="brand-subtitle">Huỳnh Hữu Phước - 125000155 (LHU)</span>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Trang chủ</a></li>
+        <li><a href="bai1.html" class="nav-link"><i class="fas fa-address-book"></i> Bài 1</a></li>
+        <li><a href="bai2.html" class="nav-link"><i class="fas fa-calculator"></i> Bài 2</a></li>
+        <li><a href="bai3.html" class="nav-link"><i class="fas fa-sort-amount-down"></i> Bài 3</a></li>
+        <li><a href="bai4.html" class="nav-link"><i class="fas fa-user-graduate"></i> Bài 4</a></li>
+        <li><a href="bai5.html" class="nav-link"><i class="fas fa-code"></i> Bài 5</a></li>
+        <li><a href="bai6.html" class="nav-link active"><i class="fas fa-trash-alt"></i> Bài 6</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="container">
+    <div class="page-header">
+      <div class="header-badge"><i class="fas fa-trash"></i> Homework Exercise 06</div>
+      <h1 class="page-title">Bài 6: Xóa phần tử & Đồng bộ Dữ liệu với Giao diện</h1>
+      <p class="page-desc">
+        Xây dựng logic khi click vào nút "Xóa" cạnh sản phẩm, phần tử đó sẽ bị loại bỏ khỏi mảng dữ liệu bằng <code>filter()</code> hoặc <code>splice()</code>, đồng thời tự động cập nhật lại danh sách hiển thị trên DOM.
+      </p>
+    </div>
+
+    <!-- Status & Action Bar -->
+    <div class="card" style="margin-bottom: 2rem;">
+      <div class="card-body">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <div style="font-size: 1.1rem; font-weight: 700; color: var(--dark);">
+              <i class="fas fa-boxes" style="color: var(--primary);"></i> Còn lại: <span id="items-remaining-count" style="color: var(--primary); font-family: var(--font-mono);">0</span> sản phẩm
+            </div>
+            <span class="badge badge-success" id="delete-method-badge">Phương pháp: Array.filter()</span>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button class="btn btn-secondary btn-sm" id="btn-undo" disabled>
+              <i class="fas fa-undo"></i> Hoàn tác xóa (<span id="undo-count">0</span>)
+            </button>
+            <button class="btn btn-primary btn-sm" id="btn-reset-all">
+              <i class="fas fa-sync-alt"></i> Khôi phục danh sách đầy đủ
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Grid with Delete Controls -->
+    <div class="product-grid" id="product-delete-grid" style="margin-bottom: 2.5rem;">
+      <!-- Cards rendered via JS -->
+    </div>
+
+    <!-- Code Documentation -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+      
+      <div class="code-panel">
+        <div class="code-header">
+          <span class="code-title">delete_logic.js (2 cách xóa phần tử trong mảng JS)</span>
+          <button class="btn btn-sm btn-secondary" onclick="copyToClipboard(document.getElementById('code-delete').innerText)">
+            <i class="far fa-copy"></i> Copy
+          </button>
+        </div>
+        <pre class="code-content" id="code-delete"><code>// CÁCH 1: Dùng filter() (Khuyên dùng trong Functional Programming & React)
+// Lọc giữ lại tất cả sản phẩm CÓ ID KHÁC với ID cần xóa
+function xoaBangFilter(idCanXoa) {
+  danhSach = danhSach.filter(sp => sp.id !== idCanXoa);
+  renderDanhSach(); // Vẽ lại giao diện
+}
+
+// CÁCH 2: Dùng findIndex() kết hợp splice()
+function xoaBangSplice(idCanXoa) {
+  const index = danhSach.findIndex(sp => sp.id === idCanXoa);
+  if (index !== -1) {
+    danhSach.splice(index, 1); // Xóa 1 phần tử tại vị trí index
+    renderDanhSach();
+  }
+}</code></pre>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-check-double" style="color: var(--success);"></i> So sánh 2 cách xóa</div>
+        </div>
+        <div class="card-body" style="font-size: 0.9rem; line-height: 1.6;">
+          <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr style="border-bottom: 2px solid var(--slate-200); text-align: left;">
+                <th style="padding: 0.5rem 0;">Tiêu chí</th>
+                <th style="padding: 0.5rem;">Dùng filter()</th>
+                <th style="padding: 0.5rem;">Dùng splice()</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid var(--slate-100);">
+                <td style="padding: 0.5rem 0; font-weight: 700;">Tính bất biến</td>
+                <td style="padding: 0.5rem; color: var(--success);"><i class="fas fa-check"></i> Trả về mảng mới</td>
+                <td style="padding: 0.5rem; color: var(--danger);"><i class="fas fa-times"></i> Đột biến mảng gốc</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--slate-100);">
+                <td style="padding: 0.5rem 0; font-weight: 700;">Độ ngắn gọn</td>
+                <td style="padding: 0.5rem; color: var(--success);">1 dòng code duy nhất</td>
+                <td style="padding: 0.5rem;">Cần 2 bước (tìm + xóa)</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.5rem 0; font-weight: 700;">Ứng dụng thực tế</td>
+                <td style="padding: 0.5rem; font-weight: 600; color: var(--primary);">Tiêu chuẩn trong React/Vue</td>
+                <td style="padding: 0.5rem;">Khi cần tối ưu bộ nhớ lớn</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <i class="fas fa-laptop-code"></i> Đại học Lạc Hồng · Khoa Công Nghệ Thông Tin
+      </div>
+      <div>Sinh viên: <strong>Huỳnh Hữu Phước</strong> (MSSV: 125000155) · Tuần 12</div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    // Dữ liệu ban đầu
+    const initialList = [
+      {
+        id: 101,
+        ten: "Tai nghe chống ồn Sony WH-1000XM5",
+        gia: 6990000,
+        danhMuc: "Âm thanh",
+        hinhAnh: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 102,
+        ten: "Bàn phím cơ không dây Logitech MX Mechanical",
+        gia: 3490000,
+        danhMuc: "Bàn phím",
+        hinhAnh: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 103,
+        ten: "Chuột công thái học Logitech MX Master 3S",
+        gia: 2490000,
+        danhMuc: "Chuột",
+        hinhAnh: "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 104,
+        ten: "Webcam Elgato Facecam Pro 4K60",
+        gia: 7990000,
+        danhMuc: "Camera",
+        hinhAnh: "https://images.unsplash.com/photo-1588508065123-287b28e013da?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 105,
+        ten: "Microphone thu âm Shure MV7 USB/XLR",
+        gia: 5990000,
+        danhMuc: "Âm thanh",
+        hinhAnh: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 106,
+        ten: "Màn hình cong Samsung Odyssey G7 27 inch",
+        gia: 9990000,
+        danhMuc: "Màn hình",
+        hinhAnh: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=500&auto=format&fit=crop&q=60"
+      }
+    ];
+
+    let productList = JSON.parse(JSON.stringify(initialList));
+    const deletedHistory = []; // Hàng đợi lưu các phần tử vừa xóa để hoàn tác
+
+    // Render danh sách sản phẩm
+    function renderProductGrid() {
+      const container = document.getElementById('product-delete-grid');
+      document.getElementById('items-remaining-count').textContent = productList.length;
+
+      // Cập nhật nút hoàn tác
+      const undoBtn = document.getElementById('btn-undo');
+      document.getElementById('undo-count').textContent = deletedHistory.length;
+      undoBtn.disabled = deletedHistory.length === 0;
+
+      if (productList.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 1rem; background: var(--white); border-radius: var(--radius-lg); border: 2px dashed var(--slate-300);">
+            <i class="fas fa-trash-restore-alt" style="font-size: 3.5rem; color: var(--slate-300); margin-bottom: 1rem;"></i>
+            <h3 style="color: var(--dark); margin-bottom: 0.5rem;">Bạn đã xóa hết tất cả sản phẩm!</h3>
+            <p style="color: var(--slate-500); margin-bottom: 1.5rem;">Nhấn nút bên dưới để khôi phục toàn bộ danh sách sản phẩm ban đầu.</p>
+            <button class="btn btn-primary" onclick="resetAll()">
+              <i class="fas fa-sync-alt"></i> Khôi phục danh sách đầy đủ
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = productList.map(item => `
+        <div class="product-card" id="card-${item.id}">
+          <div class="product-img-wrapper">
+            <img src="${item.hinhAnh}" alt="${item.ten}" class="product-img">
+            <span class="product-category-tag">${item.danhMuc}</span>
+          </div>
+          <div class="product-info">
+            <h4 class="product-title" title="${item.ten}">${item.ten}</h4>
+            <div class="product-price-box">
+              <span class="price-current">${formatVND(item.gia)}</span>
+            </div>
+            
+            <!-- NÚT XÓA THEO YÊU CẦU BÀI 6 -->
+            <button class="btn btn-danger btn-sm" style="width: 100%; margin-top: auto;" onclick="deleteProduct(${item.id})">
+              <i class="fas fa-trash-alt"></i> Xóa sản phẩm này
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // LOGIC XÓA SẢN PHẨM SỬ DỤNG filter() THEO YÊU CẦU BÀI 6
+    window.deleteProduct = function(id) {
+      const cardEl = document.getElementById(`card-${id}`);
+      const targetProduct = productList.find(p => p.id === id);
+
+      if (cardEl) {
+        // Hiệu ứng mờ dần trước khi xóa khỏi DOM
+        cardEl.style.transition = 'all 0.3s ease';
+        cardEl.style.opacity = '0';
+        cardEl.style.transform = 'scale(0.9)';
+      }
+
+      setTimeout(() => {
+        // Lưu vào lịch sử để có thể Undo
+        if (targetProduct) {
+          deletedHistory.push(targetProduct);
+        }
+
+        // DÙNG HÀM FILTER ĐỂ LOẠI BỎ SẢN PHẨM CÓ ID TRÙNG KHỚP
+        productList = productList.filter(item => item.id !== id);
+
+        renderProductGrid();
+        showToast(`Đã xóa: "${targetProduct.ten}"`, 'danger');
+        console.log(`[filter()] Đã xóa id ${id}. Mảng còn lại:`, productList);
+      }, 250);
+    };
+
+    // Hoàn tác phần tử vừa xóa
+    document.getElementById('btn-undo').addEventListener('click', () => {
+      if (deletedHistory.length > 0) {
+        const restoredItem = deletedHistory.pop();
+        productList.unshift(restoredItem);
+        renderProductGrid();
+        showToast(`Đã khôi phục: "${restoredItem.ten}"`, 'success');
+        console.log("Đã hoàn tác:", restoredItem);
+      }
+    });
+
+    // Khôi phục tất cả
+    window.resetAll = function() {
+      productList = JSON.parse(JSON.stringify(initialList));
+      deletedHistory.length = 0; // Clear undo
+      renderProductGrid();
+      showToast('Đã khôi phục toàn bộ danh sách ban đầu!', 'primary');
+    };
+
+    document.getElementById('btn-reset-all').addEventListener('click', resetAll);
+
+    // Khởi chạy
+    renderProductGrid();
+    console.log("Bài 6: Xóa phần tử với filter() sẵn sàng!");
+  </script>
+</body>
+</html>

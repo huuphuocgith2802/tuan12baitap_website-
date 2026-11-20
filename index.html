@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tuần 12: Quản Lý Dữ Liệu Với Mảng Nâng Cao & Đối Tượng | Huỳnh Hữu Phước - 125000155</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    .hero-banner {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+      color: white;
+      border-radius: var(--radius-xl);
+      padding: 3rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 2.5rem;
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.25);
+    }
+    .hero-banner::after {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, rgba(79, 70, 229, 0.4) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .feature-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--slate-200);
+      padding: 1.5rem;
+      transition: all var(--transition-normal);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--primary);
+    }
+    .card-icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">
+        <div class="brand-icon"><i class="fas fa-cubes"></i></div>
+        <div class="brand-info">
+          <span class="brand-title">Tuần 12: Data Management</span>
+          <span class="brand-subtitle">Huỳnh Hữu Phước - 125000155 (LHU)</span>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link active"><i class="fas fa-home"></i> Trang chủ</a></li>
+        <li><a href="#in-class-section" class="nav-link"><i class="fas fa-chalkboard-teacher"></i> Thực hành lớp</a></li>
+        <li><a href="#homework-section" class="nav-link"><i class="fas fa-tasks"></i> 6 Bài tập</a></li>
+        <li><a href="challenge/the_smart_catalog.html" class="nav-link nav-btn-highlight"><i class="fas fa-store"></i> The Smart Catalog</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="container">
+
+    <!-- Hero Banner -->
+    <section class="hero-banner">
+      <div style="position: relative; z-index: 2;">
+        <div class="header-badge" style="background: rgba(255, 255, 255, 0.15); color: #a5b4fc; border: 1px solid rgba(255, 255, 255, 0.2);">
+          <i class="fas fa-graduation-cap"></i> Học phần 111101 · Thiết kế Web · Lạc Hồng Trang 73
+        </div>
+        <h1 style="font-size: 2.4rem; font-weight: 800; margin-bottom: 0.75rem; letter-spacing: -0.02em; line-height: 1.25;">
+          TUẦN 12: QUẢN LÝ DỮ LIỆU VỚI MẢNG NÂNG CAO &amp; ĐỐI TƯỢNG
+        </h1>
+        <p style="color: #cbd5e1; font-size: 1.1rem; max-width: 820px; margin-bottom: 1.5rem; line-height: 1.6;">
+          Hệ thống Dashboard trung tâm tích hợp đầy đủ 3 Hoạt động thực hành trên lớp, 6 Bài tập tự rèn luyện tại nhà và Thách thức nhóm <strong>"The Smart Catalog"</strong> với kiến trúc dữ liệu tập trung theo chuẩn Data + Logic = UI.
+        </p>
+
+        <!-- Student Metadata Badge -->
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; background: rgba(255, 255, 255, 0.08); padding: 0.85rem 1.25rem; border-radius: var(--radius-md); border: 1px solid rgba(255, 255, 255, 0.15); width: fit-content;">
+          <div><i class="fas fa-user-circle" style="color: #38bdf8;"></i> Sinh viên: <strong>Huỳnh Hữu Phước</strong></div>
+          <div><i class="fas fa-id-card" style="color: #4ade80;"></i> MSSV: <strong>125000155</strong></div>
+          <div><i class="fas fa-envelope" style="color: #facc15;"></i> Email: <strong>125000155@lachong.edu.vn</strong></div>
+          <div><i class="fab fa-github" style="color: #c084fc;"></i> GitHub: <strong>huuphuocgith2802</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Learning Outcomes (LLO) -->
+    <section style="margin-bottom: 3rem;">
+      <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--dark); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+        <i class="fas fa-check-circle" style="color: var(--success);"></i> Chuẩn đầu ra bài học (LLO) đã hoàn thành:
+      </h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+        <div class="card" style="padding: 1.25rem; border-left: 4px solid var(--primary);">
+          <strong style="color: var(--primary); display: block; margin-bottom: 0.25rem;">LLO 3.5.1</strong>
+          <p style="font-size: 0.875rem; color: var(--slate-600); margin: 0;">Khai báo và truy xuất dữ liệu từ Object (Đối tượng) thành thạo, viết method nội tại với từ khóa <code>this</code>.</p>
+        </div>
+        <div class="card" style="padding: 1.25rem; border-left: 4px solid var(--secondary);">
+          <strong style="color: var(--secondary); display: block; margin-bottom: 0.25rem;">LLO 3.5.2</strong>
+          <p style="font-size: 0.875rem; color: var(--slate-600); margin: 0;">Sử dụng <code>filter()</code> để lọc danh sách đa điều kiện và <code>map()</code> để hiển thị dữ liệu ra giao diện HTML.</p>
+        </div>
+        <div class="card" style="padding: 1.25rem; border-left: 4px solid var(--success);">
+          <strong style="color: var(--success); display: block; margin-bottom: 0.25rem;">LLO 3.5.3</strong>
+          <p style="font-size: 0.875rem; color: var(--slate-600); margin: 0;">Kết hợp kiến thức DOM để đổ dữ liệu từ mảng Object lên web tự động, không hardcode HTML thủ công.</p>
+        </div>
+        <div class="card" style="padding: 1.25rem; border-left: 4px solid var(--warning);">
+          <strong style="color: var(--warning); display: block; margin-bottom: 0.25rem;">LLO 3.5.4</strong>
+          <p style="font-size: 0.875rem; color: var(--slate-600); margin: 0;">Sử dụng Prompt để yêu cầu AI tạo cấu trúc JSON mẫu chuẩn hóa và giải thích thuật toán logic tối ưu.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Challenge Highlight Banner -->
+    <section style="margin-bottom: 3.5rem;">
+      <div class="card" style="background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%); border: 2px solid var(--primary); overflow: hidden;">
+        <div class="card-body" style="padding: 2.5rem;">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 2rem;">
+            <div style="flex: 1; min-width: 300px;">
+              <span class="badge badge-primary" style="margin-bottom: 0.75rem;"><i class="fas fa-star"></i> DỰ ÁN TRỌNG TÂM TUẦN 12</span>
+              <h2 style="font-size: 1.85rem; font-weight: 800; color: var(--dark); margin-bottom: 0.75rem;">
+                🎯 Thách thức: "The Smart Catalog" (TechZone)
+              </h2>
+              <p style="color: var(--slate-600); font-size: 1rem; line-height: 1.6; margin-bottom: 1.25rem;">
+                Dự án quản lý dữ liệu tập trung gồm file <code>data.js</code> (16 sản phẩm đa dạng thông số), thuật toán tự động hiển thị, tìm kiếm thời gian thực, lọc theo khoảng giá, và giỏ hàng tính tổng với <code>reduce()</code>.
+              </p>
+              <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                <a href="challenge/the_smart_catalog.html" class="btn btn-primary">
+                  <i class="fas fa-play-circle"></i> Trải nghiệm The Smart Catalog
+                </a>
+                <a href="data_logic.md" class="btn btn-secondary">
+                  <i class="fas fa-file-alt"></i> Xem báo cáo data_logic.md
+                </a>
+              </div>
+            </div>
+            <div style="width: 280px; text-align: center; background: white; padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--slate-200); box-shadow: var(--shadow-md);">
+              <i class="fas fa-store-alt" style="font-size: 3.5rem; color: var(--primary); margin-bottom: 0.75rem;"></i>
+              <h4 style="font-size: 1.1rem; font-weight: 800; color: var(--dark);">TechZone Catalog</h4>
+              <p style="font-size: 0.8rem; color: var(--slate-500); margin-bottom: 1rem;">16 sản phẩm · 4 danh mục · Bộ lọc live</p>
+              <a href="challenge/the_smart_catalog.html" class="btn btn-sm btn-outline" style="width: 100%;">
+                Mở ứng dụng <i class="fas fa-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 1: IN-CLASS ACTIVITIES -->
+    <section id="in-class-section" style="margin-bottom: 3.5rem;">
+      <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1.5rem;">
+        <div>
+          <span style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em;">Phần 1: Thực hành trên lớp</span>
+          <h2 style="font-size: 1.65rem; font-weight: 800; color: var(--dark);">Hoạt Động Thực Hành (In-Class Activities)</h2>
+        </div>
+        <span class="badge badge-secondary">3 Hoạt động (105 phút)</span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+        
+        <!-- HĐ 1 -->
+        <div class="feature-card">
+          <div class="card-icon-box" style="background: var(--primary-light); color: var(--primary);">
+            <i class="fas fa-user-tag"></i>
+          </div>
+          <span class="badge badge-primary" style="width: fit-content; margin-bottom: 0.5rem;">Hoạt động 1 (30 phút)</span>
+          <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--dark); margin-bottom: 0.5rem;">"Object Identity" - Định danh đối tượng</h3>
+          <p style="font-size: 0.9rem; color: var(--slate-600); margin-bottom: 1.25rem; flex-grow: 1;">
+            Tạo Object <code>user</code> chứa thông tin bản thân và mảng kỹ năng. Dùng method nội tại tự tính năm sinh và in ra câu giới thiệu qua console.
+          </p>
+          <a href="in-class/hoatdong1.html" class="btn btn-outline btn-sm" style="width: 100%;">
+            <i class="fas fa-external-link-alt"></i> Mở Hoạt động 1
+          </a>
+        </div>
+
+        <!-- HĐ 2 -->
+        <div class="feature-card">
+          <div class="card-icon-box" style="background: var(--secondary-light); color: var(--secondary);">
+            <i class="fas fa-filter"></i>
+          </div>
+          <span class="badge badge-primary" style="width: fit-content; margin-bottom: 0.5rem;">Hoạt động 2 (45 phút)</span>
+          <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--dark); margin-bottom: 0.5rem;">"The Product Filter" - Bộ lọc sản phẩm</h3>
+          <p style="font-size: 0.9rem; color: var(--slate-600); margin-bottom: 1.25rem; flex-grow: 1;">
+            Mảng 10 sản phẩm công nghệ. Ứng dụng hàm <code>filter()</code> lọc sản phẩm giảm giá, giá &gt; 1 triệu và dùng <code>map()</code> hiển thị tên.
+          </p>
+          <a href="in-class/hoatdong2.html" class="btn btn-outline btn-sm" style="width: 100%;">
+            <i class="fas fa-external-link-alt"></i> Mở Hoạt động 2
+          </a>
+        </div>
+
+        <!-- HĐ 3 -->
+        <div class="feature-card">
+          <div class="card-icon-box" style="background: var(--success-light); color: var(--success);">
+            <i class="fas fa-magic"></i>
+          </div>
+          <span class="badge badge-primary" style="width: fit-content; margin-bottom: 0.5rem;">Hoạt động 3 (30 phút)</span>
+          <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--dark); margin-bottom: 0.5rem;">"Dynamic UI Render" - Đổ dữ liệu tự động</h3>
+          <p style="font-size: 0.9rem; color: var(--slate-600); margin-bottom: 1.25rem; flex-grow: 1;">
+            Tự động sinh ra hàng loạt thẻ card từ mảng dữ liệu với <code>map()</code> và so sánh hiệu năng trực quan với <code>forEach()</code>.
+          </p>
+          <a href="in-class/hoatdong3.html" class="btn btn-outline btn-sm" style="width: 100%;">
+            <i class="fas fa-external-link-alt"></i> Mở Hoạt động 3
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 2: 6 HOMEWORK EXERCISES -->
+    <section id="homework-section" style="margin-bottom: 3.5rem;">
+      <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1.5rem;">
+        <div>
+          <span style="font-size: 0.8rem; font-weight: 700; color: var(--success); text-transform: uppercase; letter-spacing: 0.05em;">Phần 2: Tự rèn luyện tại nhà</span>
+          <h2 style="font-size: 1.65rem; font-weight: 800; color: var(--dark);">6 Bài Tập Về Nhà (Homework)</h2>
+        </div>
+        <span class="badge badge-success">Đã hoàn thành 6/6</span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+        
+        <!-- Bài 1 -->
+        <div class="feature-card">
+          <div class="card-icon-box" style="background: #eef2ff; color: #4f46e5;">
+            <i class="fas fa-address-book"></i>
+          </div>
+          <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--dark); margin-bottom: 0.4rem;">Bài 1: Danh bạ điện thoại</h4>
+          <p style="font-size: 0.85rem; color: var(--slate-600); margin-bottom: 1.25rem; flex-grow: 1;">
+            Mảng Object liên hệ. Hàm tìm kiếm số điện thoại khi nhập tên kết hợp thêm mới liên hệ vào mảng.
+          </p>
+          <a href="homework/bai1.html" class="btn btn-outline btn-sm" style="width: 100%;">
+            <i class="fas fa-arrow-right"></i> Xem Bài 1
+          </a>
+        </div>
+
+        <!-- Bài 2 -->
+        <div class="feature-card">
+          <div class="card-icon-box" style="background: #ecfeff; color: #06b6d4;">
+            <i class="fas fa-calculator"></i>
+          </div>
+          <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--dark); margin-bottom: 0.4rem;">Bài 2: Tính tổng giỏ hàng</h4>
+          <p style="font-size: 0.85rem; color: var(--slate-600); margin-bottom: 1.25rem; flex-grow: 1;">
+            Sử dụng hàm <code>reduce()</code> để tính tổng số tiền giỏ hàng (giá * số lượng) và cập nhật real-time khi tăng giảm.
+          </p>
+          <a href="homework/bai2.html" class="btn btn-outline btn-sm" style="width: 100%;">
+            <i class="fas fa-arrow-right"></i> Xem Bài 2
+          </a>
+        </div>
+
+        <!-- Bài 3 -->
+        <div class="feature-card">
+          <div class="card-icon-box" style="background: #fef3c7; color: #d97706;">
+            <i class="fas fa-sort-amount-down"></i>
+          </div>
+          <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--dark); margin-bottom: 0.4rem;">Bài 3: Sắp xếp danh sách</h4>
+          <p style="font-size: 0.85rem; color: var(--slate-600); margin-bottom: 1.25rem; flex-grow: 1;">
+            Sử dụng hàm <code>sort()</code> sắp xếp mảng sản phẩm theo giá từ thấp đến cao, cao đến thấp và tên A-Z.
+          </p>
+          <a href="homework/bai3.html" class="btn btn-outline btn-sm" style="width: 100%;">
+            <i class="fas fa-arrow-right"></i> Xem Bài 3
+          </a>
+        </div>
+
+        <!-- Bài 4 -->
+        <div class="feature-card">
+          <div class="card-icon-box" style="background: #d1fae5; color: #059669;">
+            <i class="fas fa-user-graduate"></i>
+          </div>
+          <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--dark); margin-bottom: 0.4rem;">Bài 4: Quản lý sinh viên</h4>
+          <p style="font-size: 0.85rem; color: var(--slate-600); margin-bottom: 1.25rem; flex-grow: 1;">
+            Object sinh viên có điểm số. Hàm kiểm tra nếu điểm &gt;= 5 thì tự gán thuộc tính <code>ketQua: "Đậu"</code>, ngược lại <code>"Rớt"</code>.
+          </p>
+          <a href="homework/bai4.html" class="btn btn-outline btn-sm" style="width: 100%;">
+            <i class="fas fa-arrow-right"></i> Xem Bài 4
+          </a>
+        </div>
+
+        <!-- Bài 5 -->
+        <div class="feature-card">
+          <div class="card-icon-box" style="background: #fee2e2; color: #dc2626;">
+            <i class="fas fa-code"></i>
+          </div>
+          <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--dark); margin-bottom: 0.4rem;">Bài 5: Biến đổi mảng với map()</h4>
+          <p style="font-size: 0.85rem; color: var(--slate-600); margin-bottom: 1.25rem; flex-grow: 1;">
+            Sử dụng <code>map()</code> biến đổi một mảng tên chuỗi thành mảng các thẻ <code>&lt;li&gt;Tên&lt;/li&gt;</code> trực quan hóa pipeline.
+          </p>
+          <a href="homework/bai5.html" class="btn btn-outline btn-sm" style="width: 100%;">
+            <i class="fas fa-arrow-right"></i> Xem Bài 5
+          </a>
+        </div>
+
+        <!-- Bài 6 -->
+        <div class="feature-card">
+          <div class="card-icon-box" style="background: #f1f5f9; color: #475569;">
+            <i class="fas fa-trash-alt"></i>
+          </div>
+          <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--dark); margin-bottom: 0.4rem;">Bài 6: Xóa phần tử</h4>
+          <p style="font-size: 0.85rem; color: var(--slate-600); margin-bottom: 1.25rem; flex-grow: 1;">
+            Logic khi bấm nút "Xóa" cạnh sản phẩm, sản phẩm biến mất khỏi DOM và loại bỏ khỏi mảng bằng <code>filter()</code>.
+          </p>
+          <a href="homework/bai6.html" class="btn btn-outline btn-sm" style="width: 100%;">
+            <i class="fas fa-arrow-right"></i> Xem Bài 6
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <i class="fas fa-laptop-code"></i> Đại học Lạc Hồng · Khoa Công Nghệ Thông Tin
+      </div>
+      <div>Sinh viên: <strong>Huỳnh Hữu Phước</strong> (MSSV: 125000155) · Tuần 12</div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

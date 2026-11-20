@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bài 2: Tính tổng giỏ hàng | Homework Tuần 12</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-brand">
+        <div class="brand-icon"><i class="fas fa-cubes"></i></div>
+        <div class="brand-info">
+          <span class="brand-title">Tuần 12: Data Management</span>
+          <span class="brand-subtitle">Huỳnh Hữu Phước - 125000155 (LHU)</span>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Trang chủ</a></li>
+        <li><a href="bai1.html" class="nav-link"><i class="fas fa-address-book"></i> Bài 1</a></li>
+        <li><a href="bai2.html" class="nav-link active"><i class="fas fa-calculator"></i> Bài 2</a></li>
+        <li><a href="bai3.html" class="nav-link"><i class="fas fa-sort-amount-down"></i> Bài 3</a></li>
+        <li><a href="bai4.html" class="nav-link"><i class="fas fa-user-graduate"></i> Bài 4</a></li>
+        <li><a href="bai5.html" class="nav-link"><i class="fas fa-code"></i> Bài 5</a></li>
+        <li><a href="bai6.html" class="nav-link"><i class="fas fa-trash-alt"></i> Bài 6</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="container">
+    <div class="page-header">
+      <div class="header-badge"><i class="fas fa-shopping-cart"></i> Homework Exercise 02</div>
+      <h1 class="page-title">Bài 2: Tính tổng giỏ hàng (Shopping Cart Total)</h1>
+      <p class="page-desc">
+        Cho một mảng các sản phẩm trong giỏ hàng (<code>tên</code>, <code>giá</code>, <code>số lượng</code>). Sử dụng hàm <code>Array.prototype.reduce()</code> để tính lũy kế tổng số tiền và cập nhật trực tiếp theo thời gian thực khi thay đổi số lượng.
+      </p>
+    </div>
+
+    <!-- Cart Layout -->
+    <div style="display: grid; grid-template-columns: 1.8fr 1.2fr; gap: 1.5rem; margin-bottom: 2rem;">
+      
+      <!-- Cart Table/List -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <i class="fas fa-shopping-bag" style="color: var(--primary);"></i> Sản phẩm trong giỏ hàng (<span id="cart-item-count">0</span> món)
+          </div>
+          <button class="btn btn-sm btn-outline" id="btn-reset-cart"><i class="fas fa-undo"></i> Đặt lại giỏ hàng</button>
+        </div>
+        <div class="card-body" style="padding: 0;">
+          <div id="cart-items-container">
+            <!-- Items rendered via JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Summary Card -->
+      <div class="card" style="height: fit-content;">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-receipt" style="color: var(--secondary);"></i> Tóm tắt đơn hàng</div>
+        </div>
+        <div class="card-body">
+          <div style="display: flex; flex-direction: column; gap: 0.85rem; font-size: 0.95rem; margin-bottom: 1.25rem;">
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--slate-600);">Tổng tiền hàng (Tạm tính):</span>
+              <strong id="summary-subtotal" style="font-family: var(--font-mono); color: var(--dark);">0 ₫</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--slate-600);">Giảm giá voucher:</span>
+              <strong id="summary-discount" style="font-family: var(--font-mono); color: var(--success);">-0 ₫</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--slate-600);">Thuế VAT (8%):</span>
+              <strong id="summary-tax" style="font-family: var(--font-mono); color: var(--slate-600);">0 ₫</strong>
+            </div>
+            <hr style="border: none; border-top: 1px dashed var(--slate-200); margin: 0.25rem 0;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+              <span style="font-size: 1.1rem; font-weight: 800; color: var(--dark);">Tổng thanh toán:</span>
+              <strong id="summary-grandtotal" style="font-size: 1.4rem; font-weight: 800; color: var(--danger); font-family: var(--font-mono);">0 ₫</strong>
+            </div>
+          </div>
+
+          <!-- Coupon Code Input -->
+          <div class="form-group">
+            <label class="form-label" for="coupon-code">Mã ưu đãi (Thử mã: <code>LACHONG10</code>):</label>
+            <div style="display: flex; gap: 0.5rem;">
+              <input type="text" id="coupon-code" class="form-control" placeholder="Nhập mã...">
+              <button class="btn btn-secondary btn-sm" id="btn-apply-coupon">Áp dụng</button>
+            </div>
+          </div>
+
+          <button class="btn btn-primary" style="width: 100%;" onclick="showToast('Đơn hàng đã được thanh toán giả lập thành công!', 'success')">
+            <i class="fas fa-credit-card"></i> Tiến hành thanh toán
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Educational Explanation of reduce() -->
+    <div class="code-panel">
+      <div class="code-header">
+        <span class="code-title">cart_reduce_logic.js (Cách hoạt động của Array.prototype.reduce)</span>
+        <button class="btn btn-sm btn-secondary" onclick="copyToClipboard(document.getElementById('code-reduce').innerText)">
+          <i class="far fa-copy"></i> Copy
+        </button>
+      </div>
+      <pre class="code-content" id="code-reduce"><code>// 1. Mảng các sản phẩm trong giỏ hàng
+const gioHang = [
+  { id: 1, ten: "Chuột Gaming Logitech G102", gia: 420000, soLuong: 2 },
+  { id: 2, ten: "Bàn phím cơ AKKO 3087", gia: 1250000, soLuong: 1 },
+  { id: 3, ten: "Lót chuột cỡ lớn RGB", gia: 180000, soLuong: 3 }
+];
+
+// 2. Tính tổng tiền bằng reduce()
+// Cú pháp: array.reduce((accumulator, currentItem) => accumulator + ..., initialValue)
+const tongTien = gioHang.reduce((accumulator, item) => {
+  return accumulator + (item.gia * item.soLuong);
+}, 0);
+
+console.log("Tổng tiền giỏ hàng:", tongTien); // Kết quả: 2.630.000 ₫</code></pre>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <i class="fas fa-laptop-code"></i> Đại học Lạc Hồng · Khoa Công Nghệ Thông Tin
+      </div>
+      <div>Sinh viên: <strong>Huỳnh Hữu Phước</strong> (MSSV: 125000155) · Tuần 12</div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    // Dữ liệu ban đầu của giỏ hàng
+    const defaultCart = [
+      {
+        id: 1,
+        ten: "Chuột Gaming Logitech G102 Lightsync",
+        gia: 420000,
+        soLuong: 2,
+        image: "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=200&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 2,
+        ten: "Bàn phím cơ không dây AKKO 3087 V2",
+        gia: 1250000,
+        soLuong: 1,
+        image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=200&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 3,
+        ten: "Tai nghe True Wireless Sony WF-C500",
+        gia: 1490000,
+        soLuong: 1,
+        image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=200&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 4,
+        ten: "Lót chuột cỡ lớn Speed Precision 80x30cm",
+        gia: 150000,
+        soLuong: 3,
+        image: "https://images.unsplash.com/photo-1629429408209-13c129e8d4cd?w=200&auto=format&fit=crop&q=60"
+      }
+    ];
+
+    let cart = JSON.parse(JSON.stringify(defaultCart));
+    let discountPercent = 0; // 0% mặc định
+
+    // Render danh sách sản phẩm trong giỏ hàng
+    function renderCart() {
+      const container = document.getElementById('cart-items-container');
+      document.getElementById('cart-item-count').textContent = cart.length;
+
+      if (cart.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 3rem; color: var(--slate-400);">
+            <i class="fas fa-shopping-cart" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+            <h4>Giỏ hàng của bạn đang trống</h4>
+            <button class="btn btn-primary btn-sm" style="margin-top: 1rem;" onclick="resetCart()">
+              <i class="fas fa-redo"></i> Nạp lại giỏ hàng mẫu
+            </button>
+          </div>
+        `;
+        updateOrderSummary();
+        return;
+      }
+
+      container.innerHTML = cart.map(item => `
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--slate-100); gap: 1rem; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 1rem; flex: 1; min-width: 200px;">
+            <img src="${item.image}" alt="${item.ten}" style="width: 56px; height: 56px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--slate-200);">
+            <div>
+              <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--dark); margin-bottom: 0.2rem;">${item.ten}</h4>
+              <span style="font-size: 0.85rem; color: var(--slate-500); font-family: var(--font-mono);">Đơn giá: ${formatVND(item.gia)}</span>
+            </div>
+          </div>
+
+          <!-- Quantity Controls -->
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <button class="btn btn-outline btn-sm" style="width: 32px; height: 32px; padding: 0;" onclick="changeQty(${item.id}, -1)">
+              <i class="fas fa-minus"></i>
+            </button>
+            <span style="width: 36px; text-align: center; font-weight: 700; font-family: var(--font-mono); font-size: 1rem;">${item.soLuong}</span>
+            <button class="btn btn-outline btn-sm" style="width: 32px; height: 32px; padding: 0;" onclick="changeQty(${item.id}, 1)">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+
+          <!-- Line Subtotal -->
+          <div style="min-width: 120px; text-align: right;">
+            <strong style="font-size: 1rem; color: var(--danger); font-family: var(--font-mono); display: block;">
+              ${formatVND(item.gia * item.soLuong)}
+            </strong>
+          </div>
+
+          <!-- Delete Button -->
+          <button class="btn btn-sm btn-outline" style="color: var(--danger); border-color: var(--danger-light);" title="Xóa món này" onclick="removeItem(${item.id})">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      `).join('');
+
+      updateOrderSummary();
+    }
+
+    // TÍNH TOÁN TỔNG TIỀN VỚI HÀM reduce()
+    function updateOrderSummary() {
+      // Dùng hàm reduce() theo đúng yêu cầu Bài 2
+      const subtotal = cart.reduce((total, item) => {
+        return total + (item.gia * item.soLuong);
+      }, 0);
+
+      const discountAmount = subtotal * (discountPercent / 100);
+      const taxAmount = (subtotal - discountAmount) * 0.08; // 8% VAT
+      const grandTotal = (subtotal - discountAmount) + taxAmount;
+
+      document.getElementById('summary-subtotal').textContent = formatVND(subtotal);
+      document.getElementById('summary-discount').textContent = discountPercent > 0 
+        ? `-${formatVND(discountAmount)} (${discountPercent}%)` 
+        : '-0 ₫';
+      document.getElementById('summary-tax').textContent = formatVND(taxAmount);
+      document.getElementById('summary-grandtotal').textContent = formatVND(grandTotal);
+
+      console.log(`[reduce()] Tạm tính: ${subtotal} đ | Giảm: ${discountAmount} đ | VAT: ${taxAmount} đ | Tổng cộng: ${grandTotal} đ`);
+    }
+
+    // Thay đổi số lượng
+    window.changeQty = function(id, delta) {
+      const target = cart.find(item => item.id === id);
+      if (target) {
+        target.soLuong += delta;
+        if (target.soLuong <= 0) {
+          cart = cart.filter(item => item.id !== id);
+          showToast(`Đã xóa ${target.ten} khỏi giỏ hàng`, 'warning');
+        } else {
+          showToast(`Cập nhật số lượng: ${target.soLuong}`, 'info');
+        }
+        renderCart();
+      }
+    };
+
+    // Xóa món
+    window.removeItem = function(id) {
+      const target = cart.find(item => item.id === id);
+      cart = cart.filter(item => item.id !== id);
+      renderCart();
+      if (target) showToast(`Đã xóa "${target.ten}"`, 'danger');
+    };
+
+    // Đặt lại giỏ hàng
+    window.resetCart = function() {
+      cart = JSON.parse(JSON.stringify(defaultCart));
+      discountPercent = 0;
+      document.getElementById('coupon-code').value = '';
+      renderCart();
+      showToast('Đã phục hồi giỏ hàng mẫu!', 'primary');
+    };
+
+    document.getElementById('btn-reset-cart').addEventListener('click', resetCart);
+
+    // Áp dụng coupon
+    document.getElementById('btn-apply-coupon').addEventListener('click', () => {
+      const code = document.getElementById('coupon-code').value.trim().toUpperCase();
+      if (code === 'LACHONG10') {
+        discountPercent = 10;
+        updateOrderSummary();
+        showToast('Áp dụng thành công mã LACHONG10: Giảm 10%!', 'success');
+      } else if (code === '') {
+        showToast('Vui lòng nhập mã ưu đãi!', 'warning');
+      } else {
+        showToast('Mã ưu đãi không hợp lệ!', 'danger');
+      }
+    });
+
+    // Khởi chạy
+    renderCart();
+    console.log("Bài 2: Tính tổng giỏ hàng với reduce() sẵn sàng!");
+  </script>
+</body>
+</html>

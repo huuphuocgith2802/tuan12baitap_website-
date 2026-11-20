@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bài 4: Quản lý sinh viên & Kết quả đậu/rớt | Homework Tuần 12</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-brand">
+        <div class="brand-icon"><i class="fas fa-cubes"></i></div>
+        <div class="brand-info">
+          <span class="brand-title">Tuần 12: Data Management</span>
+          <span class="brand-subtitle">Huỳnh Hữu Phước - 125000155 (LHU)</span>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Trang chủ</a></li>
+        <li><a href="bai1.html" class="nav-link"><i class="fas fa-address-book"></i> Bài 1</a></li>
+        <li><a href="bai2.html" class="nav-link"><i class="fas fa-calculator"></i> Bài 2</a></li>
+        <li><a href="bai3.html" class="nav-link"><i class="fas fa-sort-amount-down"></i> Bài 3</a></li>
+        <li><a href="bai4.html" class="nav-link active"><i class="fas fa-user-graduate"></i> Bài 4</a></li>
+        <li><a href="bai5.html" class="nav-link"><i class="fas fa-code"></i> Bài 5</a></li>
+        <li><a href="bai6.html" class="nav-link"><i class="fas fa-trash-alt"></i> Bài 6</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="container">
+    <div class="page-header">
+      <div class="header-badge"><i class="fas fa-user-graduate"></i> Homework Exercise 04</div>
+      <h1 class="page-title">Bài 4: Quản lý sinh viên & Xử lý thuộc tính động</h1>
+      <p class="page-desc">
+        Tạo Object <code>sinhVien</code> có thuộc tính <code>diemSo</code>. Viết hàm kiểm tra logic: nếu <code>diemSo >= 5</code> thì tự động gán thêm thuộc tính <code>ketQua: "Đậu"</code>, ngược lại gán <code>ketQua: "Rớt"</code>.
+      </p>
+    </div>
+
+    <!-- Stats Summary Row -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+      <div class="card" style="padding: 1.25rem;">
+        <span style="font-size: 0.8rem; color: var(--slate-500); font-weight: 700; text-transform: uppercase;">Tổng số sinh viên</span>
+        <h3 id="stat-total-students" style="font-size: 1.8rem; font-weight: 800; color: var(--dark); margin-top: 0.25rem;">0</h3>
+      </div>
+      <div class="card" style="padding: 1.25rem;">
+        <span style="font-size: 0.8rem; color: var(--slate-500); font-weight: 700; text-transform: uppercase;">Tỷ lệ Đậu</span>
+        <h3 id="stat-pass-rate" style="font-size: 1.8rem; font-weight: 800; color: var(--success); margin-top: 0.25rem;">0%</h3>
+      </div>
+      <div class="card" style="padding: 1.25rem;">
+        <span style="font-size: 0.8rem; color: var(--slate-500); font-weight: 700; text-transform: uppercase;">Điểm trung bình lớp</span>
+        <h3 id="stat-avg-score" style="font-size: 1.8rem; font-weight: 800; color: var(--primary); margin-top: 0.25rem;">0.0</h3>
+      </div>
+      <div class="card" style="padding: 1.25rem;">
+        <span style="font-size: 0.8rem; color: var(--slate-500); font-weight: 700; text-transform: uppercase;">Thủ khoa (Điểm cao nhất)</span>
+        <h3 id="stat-top-student" style="font-size: 1.1rem; font-weight: 800; color: var(--warning); margin-top: 0.5rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">-</h3>
+      </div>
+    </div>
+
+    <!-- Main Content Layout -->
+    <div style="display: grid; grid-template-columns: 1fr 1.6fr; gap: 1.5rem; margin-bottom: 2rem;">
+      
+      <!-- Add Student Form -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-plus-circle" style="color: var(--success);"></i> Thêm sinh viên & Chấm điểm</div>
+        </div>
+        <div class="card-body">
+          <form id="add-student-form">
+            <div class="form-group">
+              <label class="form-label" for="student-name">Họ và tên sinh viên:</label>
+              <input type="text" id="student-name" class="form-control" placeholder="Ví dụ: Huỳnh Hữu Phước" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="student-mssv">Mã số sinh viên (MSSV):</label>
+              <input type="text" id="student-mssv" class="form-control" placeholder="Ví dụ: 125000155" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="student-score">Điểm số (Thang điểm 10):</label>
+              <input type="number" id="student-score" class="form-control" placeholder="Nhập từ 0 đến 10" min="0" max="10" step="0.1" required>
+              <small style="color: var(--slate-500); font-size: 0.78rem; margin-top: 0.25rem; display: block;">
+                <i class="fas fa-info-circle"></i> Điểm &gt;= 5.0 sẽ tự động gán thuộc tính <strong>ketQua: "Đậu"</strong>, ngược lại là <strong>"Rớt"</strong>.
+              </small>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="student-major">Chuyên ngành:</label>
+              <select id="student-major" class="form-control form-select">
+                <option value="Kỹ thuật Phần mềm">Kỹ thuật Phần mềm</option>
+                <option value="Hệ thống Thông tin">Hệ thống Thông tin</option>
+                <option value="Mạng máy tính & ATTT">Mạng máy tính & ATTT</option>
+                <option value="Khoa học Dữ liệu">Khoa học Dữ liệu</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">
+              <i class="fas fa-check"></i> Lưu & Chạy Logic Đậu/Rớt
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Student List Table -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-list-alt" style="color: var(--primary);"></i> Bảng kết quả học tập</div>
+          <div style="display: flex; gap: 0.4rem;">
+            <button class="btn btn-sm btn-primary filter-tab active" data-filter="all">Tất cả</button>
+            <button class="btn btn-sm btn-secondary filter-tab" data-filter="dau"><i class="fas fa-check-circle" style="color: var(--success);"></i> Đậu</button>
+            <button class="btn btn-sm btn-secondary filter-tab" data-filter="rot"><i class="fas fa-times-circle" style="color: var(--danger);"></i> Rớt</button>
+          </div>
+        </div>
+        <div class="card-body" style="padding: 0; overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+            <thead>
+              <tr style="background: var(--slate-50); border-bottom: 1.5px solid var(--slate-200); text-align: left;">
+                <th style="padding: 0.85rem 1rem;">Sinh viên</th>
+                <th style="padding: 0.85rem 1rem;">Điểm số</th>
+                <th style="padding: 0.85rem 1rem;">Kết quả (ketQua)</th>
+                <th style="padding: 0.85rem 1rem;">Xếp loại</th>
+              </tr>
+            </thead>
+            <tbody id="student-table-body">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Code Explanation -->
+    <div class="code-panel">
+      <div class="code-header">
+        <span class="code-title">student_logic.js (Bổ sung thuộc tính động vào Object)</span>
+        <button class="btn btn-sm btn-secondary" onclick="copyToClipboard(document.getElementById('code-student').innerText)">
+          <i class="far fa-copy"></i> Copy
+        </button>
+      </div>
+      <pre class="code-content" id="code-student"><code>// 1. Hàm kiểm tra và gán thuộc tính ketQua theo yêu cầu Bài 4
+function kiemTraKetQua(sinhVien) {
+  // Logic kiểm tra điều kiện điểm
+  if (sinhVien.diemSo >= 5.0) {
+    sinhVien.ketQua = "Đậu";
+    sinhVien.xepLoai = sinhVien.diemSo >= 8.5 ? "Giỏi" : (sinhVien.diemSo >= 6.5 ? "Khá" : "Trung bình");
+  } else {
+    sinhVien.ketQua = "Rớt";
+    sinhVien.xepLoai = "Yếu";
+  }
+  return sinhVien;
+}
+
+// 2. Duyệt qua mảng sinh viên và áp dụng logic
+danhSachSinhVien.forEach(sv => kiemTraKetQua(sv));
+console.log("Danh sách sau khi xử lý:", danhSachSinhVien);</code></pre>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <i class="fas fa-laptop-code"></i> Đại học Lạc Hồng · Khoa Công Nghệ Thông Tin
+      </div>
+      <div>Sinh viên: <strong>Huỳnh Hữu Phước</strong> (MSSV: 125000155) · Tuần 12</div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    // Dữ liệu ban đầu
+    const studentsData = [
+      { id: 1, hoTen: "Huỳnh Hữu Phước", mssv: "125000155", diemSo: 9.5, chuyenNganh: "Kỹ thuật Phần mềm" },
+      { id: 2, hoTen: "Trần Thị Cẩm Tú", mssv: "125000112", diemSo: 7.8, chuyenNganh: "Hệ thống Thông tin" },
+      { id: 3, hoTen: "Lê Văn Hùng", mssv: "125000188", diemSo: 4.2, chuyenNganh: "Mạng máy tính & ATTT" },
+      { id: 4, hoTen: "Nguyễn Hải Đăng", mssv: "125000140", diemSo: 8.9, chuyenNganh: "Khoa học Dữ liệu" },
+      { id: 5, hoTen: "Phạm Hoàng Nam", mssv: "125000199", diemSo: 3.5, chuyenNganh: "Kỹ thuật Phần mềm" },
+      { id: 6, hoTen: "Vũ Mai Phương", mssv: "125000167", diemSo: 6.0, chuyenNganh: "Hệ thống Thông tin" }
+    ];
+
+    // HÀM XỬ LÝ THEO ĐÚNG YÊU CẦU BÀI 4
+    function processStudentResult(sv) {
+      if (sv.diemSo >= 5.0) {
+        sv.ketQua = "Đậu";
+        if (sv.diemSo >= 9.0) sv.xepLoai = "Xuất sắc";
+        else if (sv.diemSo >= 8.0) sv.xepLoai = "Giỏi";
+        else if (sv.diemSo >= 6.5) sv.xepLoai = "Khá";
+        else sv.xepLoai = "Trung bình";
+      } else {
+        sv.ketQua = "Rớt";
+        sv.xepLoai = "Yếu";
+      }
+      return sv;
+    }
+
+    // Xử lý toàn bộ mảng ban đầu
+    studentsData.forEach(processStudentResult);
+
+    let activeFilter = 'all';
+
+    function renderStudentTable() {
+      const tbody = document.getElementById('student-table-body');
+      
+      let filtered = studentsData;
+      if (activeFilter === 'dau') {
+        filtered = studentsData.filter(s => s.ketQua === 'Đậu');
+      } else if (activeFilter === 'rot') {
+        filtered = studentsData.filter(s => s.ketQua === 'Rớt');
+      }
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="4" style="text-align: center; padding: 2rem; color: var(--slate-400);">
+              Không có sinh viên nào trong danh mục này!
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(sv => `
+        <tr style="border-bottom: 1px solid var(--slate-100); transition: background-color 0.15s;" onmouseover="this.style.backgroundColor='var(--slate-50)'" onmouseout="this.style.backgroundColor='transparent'">
+          <td style="padding: 0.85rem 1rem;">
+            <div style="font-weight: 700; color: var(--dark);">${sv.hoTen}</div>
+            <div style="font-size: 0.78rem; color: var(--slate-500); font-family: var(--font-mono);">MSSV: ${sv.mssv} · ${sv.chuyenNganh}</div>
+          </td>
+          <td style="padding: 0.85rem 1rem;">
+            <strong style="font-size: 1.1rem; font-family: var(--font-mono); color: ${sv.diemSo >= 5 ? 'var(--dark)' : 'var(--danger)'};">
+              ${sv.diemSo.toFixed(1)}
+            </strong>
+          </td>
+          <td style="padding: 0.85rem 1rem;">
+            <span class="badge ${sv.ketQua === 'Đậu' ? 'badge-success' : 'badge-danger'}">
+              <i class="fas ${sv.ketQua === 'Đậu' ? 'fa-check-circle' : 'fa-times-circle'}"></i> ${sv.ketQua}
+            </span>
+          </td>
+          <td style="padding: 0.85rem 1rem;">
+            <span class="badge badge-secondary">${sv.xepLoai}</span>
+          </td>
+        </tr>
+      `).join('');
+
+      updateStatistics();
+    }
+
+    function updateStatistics() {
+      const total = studentsData.length;
+      const passCount = studentsData.filter(s => s.ketQua === 'Đậu').length;
+      const passRate = total > 0 ? ((passCount / total) * 100).toFixed(1) : 0;
+      
+      const sumScores = studentsData.reduce((acc, s) => acc + s.diemSo, 0);
+      const avgScore = total > 0 ? (sumScores / total).toFixed(2) : 0;
+
+      // Tìm thủ khoa bằng reduce
+      const topStudent = studentsData.reduce((prev, current) => {
+        return (prev.diemSo > current.diemSo) ? prev : current;
+      }, studentsData[0] || { hoTen: "Không có", diemSo: 0 });
+
+      document.getElementById('stat-total-students').textContent = total;
+      document.getElementById('stat-pass-rate').textContent = `${passRate}% (${passCount}/${total})`;
+      document.getElementById('stat-avg-score').textContent = avgScore;
+      document.getElementById('stat-top-student').textContent = `${topStudent.hoTen} (${topStudent.diemSo.toFixed(1)})`;
+    }
+
+    // Bộ lọc Đậu / Rớt
+    const tabs = document.querySelectorAll('.filter-tab');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => {
+          t.classList.remove('active', 'btn-primary');
+          t.classList.add('btn-secondary');
+        });
+        tab.classList.remove('btn-secondary');
+        tab.classList.add('active', 'btn-primary');
+
+        activeFilter = tab.getAttribute('data-filter');
+        renderStudentTable();
+      });
+    });
+
+    // Thêm sinh viên mới
+    document.getElementById('add-student-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const hoTen = document.getElementById('student-name').value.trim();
+      const mssv = document.getElementById('student-mssv').value.trim();
+      const diemSo = parseFloat(document.getElementById('student-score').value);
+      const chuyenNganh = document.getElementById('student-major').value;
+
+      let newStudent = {
+        id: Date.now(),
+        hoTen,
+        mssv,
+        diemSo,
+        chuyenNganh
+      };
+
+      // Gọi hàm kiểm tra để thêm thuộc tính ketQua: "Đậu" hoặc "Rớt"
+      newStudent = processStudentResult(newStudent);
+
+      studentsData.unshift(newStudent);
+      renderStudentTable();
+
+      // Reset form
+      document.getElementById('student-name').value = '';
+      document.getElementById('student-mssv').value = '';
+      document.getElementById('student-score').value = '';
+
+      showToast(`Đã thêm ${hoTen} - Kết quả: ${newStudent.ketQua}!`, newStudent.ketQua === 'Đậu' ? 'success' : 'danger');
+      console.log("Sinh viên mới được thêm:", newStudent);
+    });
+
+    // Khởi chạy
+    renderStudentTable();
+    console.log("Bài 4: Quản lý sinh viên & Kết quả đậu rớt sẵn sàng!");
+  </script>
+</body>
+</html>

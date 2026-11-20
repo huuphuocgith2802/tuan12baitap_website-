@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bài 3: Sắp xếp danh sách với sort() | Homework Tuần 12</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-brand">
+        <div class="brand-icon"><i class="fas fa-cubes"></i></div>
+        <div class="brand-info">
+          <span class="brand-title">Tuần 12: Data Management</span>
+          <span class="brand-subtitle">Huỳnh Hữu Phước - 125000155 (LHU)</span>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Trang chủ</a></li>
+        <li><a href="bai1.html" class="nav-link"><i class="fas fa-address-book"></i> Bài 1</a></li>
+        <li><a href="bai2.html" class="nav-link"><i class="fas fa-calculator"></i> Bài 2</a></li>
+        <li><a href="bai3.html" class="nav-link active"><i class="fas fa-sort-amount-down"></i> Bài 3</a></li>
+        <li><a href="bai4.html" class="nav-link"><i class="fas fa-user-graduate"></i> Bài 4</a></li>
+        <li><a href="bai5.html" class="nav-link"><i class="fas fa-code"></i> Bài 5</a></li>
+        <li><a href="bai6.html" class="nav-link"><i class="fas fa-trash-alt"></i> Bài 6</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="container">
+    <div class="page-header">
+      <div class="header-badge"><i class="fas fa-sort-numeric-down"></i> Homework Exercise 03</div>
+      <h1 class="page-title">Bài 3: Sắp xếp danh sách sản phẩm với sort()</h1>
+      <p class="page-desc">
+        Sử dụng hàm <code>Array.prototype.sort()</code> kết hợp hàm so sánh (comparator function) để sắp xếp danh sách sản phẩm theo giá tăng dần, giá giảm dần, và thứ tự bảng chữ cái A-Z.
+      </p>
+    </div>
+
+    <!-- Control Bar -->
+    <div class="card" style="margin-bottom: 2rem;">
+      <div class="card-body">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+            <label class="form-label" style="margin: 0; font-weight: 700; color: var(--dark);"><i class="fas fa-sort"></i> Chọn tiêu chí sắp xếp:</label>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;" id="sort-btn-group">
+              <button class="btn btn-primary btn-sm sort-btn active" data-sort="price-asc">
+                <i class="fas fa-sort-numeric-down"></i> Giá: Thấp đến Cao (Yêu cầu bài)
+              </button>
+              <button class="btn btn-secondary btn-sm sort-btn" data-sort="price-desc">
+                <i class="fas fa-sort-numeric-up-alt"></i> Giá: Cao đến Thấp
+              </button>
+              <button class="btn btn-secondary btn-sm sort-btn" data-sort="name-asc">
+                <i class="fas fa-sort-alpha-down"></i> Tên: A → Z
+              </button>
+              <button class="btn btn-secondary btn-sm sort-btn" data-sort="name-desc">
+                <i class="fas fa-sort-alpha-up-alt"></i> Tên: Z → A
+              </button>
+              <button class="btn btn-secondary btn-sm sort-btn" data-sort="rating-desc">
+                <i class="fas fa-star" style="color: #f59e0b;"></i> Đánh giá cao nhất
+              </button>
+            </div>
+          </div>
+
+          <span class="badge badge-primary" id="current-sort-display">
+            Đang sắp xếp: Giá thấp đến cao
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="product-grid" id="sorted-products-grid" style="margin-bottom: 2.5rem;">
+      <!-- Injected via JS -->
+    </div>
+
+    <!-- Code & Technical Note -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+      
+      <div class="code-panel">
+        <div class="code-header">
+          <span class="code-title">sort_comparator_logic.js</span>
+          <button class="btn btn-sm btn-secondary" onclick="copyToClipboard(document.getElementById('code-sort').innerText)">
+            <i class="far fa-copy"></i> Copy
+          </button>
+        </div>
+        <pre class="code-content" id="code-sort"><code>// 1. Sắp xếp giá từ thấp đến cao (Ascending)
+const theoGiaTangDan = [...products].sort((a, b) => a.gia - b.gia);
+
+// 2. Sắp xếp giá từ cao đến thấp (Descending)
+const theoGiaGiamDan = [...products].sort((a, b) => b.gia - a.gia);
+
+// 3. Sắp xếp chuỗi chữ cái tiếng Việt với localeCompare()
+const theoTenAZ = [...products].sort((a, b) => a.ten.localeCompare(b.ten, 'vi'));
+
+console.log("Mảng sau khi sắp xếp giá tăng dần:", theoGiaTangDan);</code></pre>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-lightbulb" style="color: var(--warning);"></i> Lưu ý quan trọng về hàm sort()</div>
+        </div>
+        <div class="card-body" style="font-size: 0.9rem; line-height: 1.6;">
+          <ul style="padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.6rem;">
+            <li><strong>Làm biến đổi mảng gốc (In-place Mutation):</strong> Hàm <code>sort()</code> mặc định thay đổi trực tiếp mảng ban đầu. Vì vậy, luôn dùng cú pháp sao chép <code>[...products].sort()</code> để giữ nguyên dữ liệu gốc (Immutability).</li>
+            <li><strong>Nguyên lý hàm so sánh:</strong>
+              <ul>
+                <li>Nếu <code>(a - b) &lt; 0</code>: <code>a</code> đứng trước <code>b</code>.</li>
+                <li>Nếu <code>(a - b) &gt; 0</code>: <code>b</code> đứng trước <code>a</code>.</li>
+                <li>Nếu <code>(a - b) === 0</code>: Giữ nguyên thứ tự.</li>
+              </ul>
+            </li>
+            <li><strong>Sắp xếp chuỗi tiếng Việt:</strong> Sử dụng <code>a.ten.localeCompare(b.ten, 'vi')</code> để hỗ trợ dấu thanh và các ký tự đặc biệt tiếng Việt chính xác.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <i class="fas fa-laptop-code"></i> Đại học Lạc Hồng · Khoa Công Nghệ Thông Tin
+      </div>
+      <div>Sinh viên: <strong>Huỳnh Hữu Phước</strong> (MSSV: 125000155) · Tuần 12</div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    // Dữ liệu sản phẩm mẫu có giá cả đa dạng
+    const productsData = [
+      {
+        id: 1,
+        ten: "Tai nghe Bluetooth Marshall Major IV",
+        gia: 3190000,
+        danhGia: 4.8,
+        hinhAnh: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 2,
+        ten: "Chuột không dây Silent Logitech Pebble M350",
+        gia: 450000,
+        danhGia: 4.5,
+        hinhAnh: "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 3,
+        ten: "Bàn phím cơ Bluetooth Keychron K2 V2",
+        gia: 1850000,
+        danhGia: 4.9,
+        hinhAnh: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 4,
+        ten: "Cáp sạc Type-C to Lightning Baseus 20W",
+        gia: 120000,
+        danhGia: 4.3,
+        hinhAnh: "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 5,
+        ten: "Loa Harman Kardon Onyx Studio 7",
+        gia: 4790000,
+        danhGia: 4.9,
+        hinhAnh: "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 6,
+        ten: "Giá đỡ Laptop nhôm công thái học xoay 360",
+        gia: 290000,
+        danhGia: 4.6,
+        hinhAnh: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 7,
+        ten: "Ổ cứng di động WD My Passport 1TB",
+        gia: 1650000,
+        danhGia: 4.7,
+        hinhAnh: "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 8,
+        ten: "Pin sạc dự phòng Xiaomi Power Bank 10000mAh",
+        gia: 380000,
+        danhGia: 4.4,
+        hinhAnh: "https://images.unsplash.com/photo-1609592426866-b3334c9c4384?w=500&auto=format&fit=crop&q=60"
+      }
+    ];
+
+    let currentSortMode = 'price-asc'; // Mặc định theo yêu cầu: giá thấp đến cao
+
+    function renderSortedGrid(items) {
+      const grid = document.getElementById('sorted-products-grid');
+      grid.innerHTML = items.map((item, index) => `
+        <div class="product-card">
+          <div class="product-img-wrapper">
+            <img src="${item.hinhAnh}" alt="${item.ten}" class="product-img">
+            <span class="product-category-tag"><i class="fas fa-hashtag"></i> #${index + 1}</span>
+          </div>
+          <div class="product-info">
+            <h4 class="product-title" title="${item.ten}">${item.ten}</h4>
+            <div class="product-rating">
+              <i class="fas fa-star"></i>
+              <span>${item.danhGia}</span>
+            </div>
+            <div class="product-price-box">
+              <span class="price-current">${formatVND(item.gia)}</span>
+            </div>
+            <div style="margin-top: auto;">
+              <button class="btn btn-outline btn-sm" style="width: 100%;" onclick="showToast('Sản phẩm #${index + 1}: ${item.ten} - ${formatVND(item.gia)}', 'info')">
+                <i class="fas fa-eye"></i> Xem vị trí #${index + 1}
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function applySorting(mode) {
+      // Sao chép mảng bằng spread operator để không thay đổi mảng gốc
+      let sorted = [...productsData];
+
+      if (mode === 'price-asc') {
+        // Sắp xếp giá từ thấp đến cao (Yêu cầu Bài 3)
+        sorted.sort((a, b) => a.gia - b.gia);
+        document.getElementById('current-sort-display').textContent = 'Đang sắp xếp: Giá thấp đến cao (Ascending)';
+      } else if (mode === 'price-desc') {
+        // Sắp xếp giá từ cao đến thấp
+        sorted.sort((a, b) => b.gia - a.gia);
+        document.getElementById('current-sort-display').textContent = 'Đang sắp xếp: Giá cao đến thấp (Descending)';
+      } else if (mode === 'name-asc') {
+        // Sắp xếp tên từ A đến Z
+        sorted.sort((a, b) => a.ten.localeCompare(b.ten, 'vi'));
+        document.getElementById('current-sort-display').textContent = 'Đang sắp xếp: Tên A → Z';
+      } else if (mode === 'name-desc') {
+        // Sắp xếp tên từ Z đến A
+        sorted.sort((a, b) => b.ten.localeCompare(a.ten, 'vi'));
+        document.getElementById('current-sort-display').textContent = 'Đang sắp xếp: Tên Z → A';
+      } else if (mode === 'rating-desc') {
+        sorted.sort((a, b) => b.danhGia - a.danhGia);
+        document.getElementById('current-sort-display').textContent = 'Đang sắp xếp: Đánh giá cao nhất';
+      }
+
+      renderSortedGrid(sorted);
+      console.log(`[sort()] Sắp xếp chế độ "${mode}":`, sorted);
+    }
+
+    // Gắn sự kiện chuyển nút sắp xếp
+    const sortButtons = document.querySelectorAll('.sort-btn');
+    sortButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        sortButtons.forEach(b => {
+          b.classList.remove('active', 'btn-primary');
+          b.classList.add('btn-secondary');
+        });
+        btn.classList.remove('btn-secondary');
+        btn.classList.add('active', 'btn-primary');
+
+        currentSortMode = btn.getAttribute('data-sort');
+        applySorting(currentSortMode);
+        showToast('Đã sắp xếp lại mảng sản phẩm!', 'success');
+      });
+    });
+
+    // Khởi chạy ban đầu
+    applySorting('price-asc');
+    console.log("Bài 3: Sắp xếp danh sách với sort() đã sẵn sàng!");
+  </script>
+</body>
+</html>

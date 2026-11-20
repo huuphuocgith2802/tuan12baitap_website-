@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bài 5: Biến đổi mảng với map() | Homework Tuần 12</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-brand">
+        <div class="brand-icon"><i class="fas fa-cubes"></i></div>
+        <div class="brand-info">
+          <span class="brand-title">Tuần 12: Data Management</span>
+          <span class="brand-subtitle">Huỳnh Hữu Phước - 125000155 (LHU)</span>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Trang chủ</a></li>
+        <li><a href="bai1.html" class="nav-link"><i class="fas fa-address-book"></i> Bài 1</a></li>
+        <li><a href="bai2.html" class="nav-link"><i class="fas fa-calculator"></i> Bài 2</a></li>
+        <li><a href="bai3.html" class="nav-link"><i class="fas fa-sort-amount-down"></i> Bài 3</a></li>
+        <li><a href="bai4.html" class="nav-link"><i class="fas fa-user-graduate"></i> Bài 4</a></li>
+        <li><a href="bai5.html" class="nav-link active"><i class="fas fa-code"></i> Bài 5</a></li>
+        <li><a href="bai6.html" class="nav-link"><i class="fas fa-trash-alt"></i> Bài 6</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="container">
+    <div class="page-header">
+      <div class="header-badge"><i class="fas fa-exchange-alt"></i> Homework Exercise 05</div>
+      <h1 class="page-title">Bài 5: Biến đổi mảng chuỗi thành thẻ HTML với map()</h1>
+      <p class="page-desc">
+        Sử dụng hàm <code>Array.prototype.map()</code> để chuyển đổi một mảng tên thông thường thành một mảng các phần tử HTML <code>&lt;li&gt;Tên&lt;/li&gt;</code>, trực quan hóa quy trình pipeline dữ liệu từ Array thô đến giao diện.
+      </p>
+    </div>
+
+    <!-- Transformation Pipeline Visualizer -->
+    <div class="card" style="margin-bottom: 2rem;">
+      <div class="card-header">
+        <div class="card-title"><i class="fas fa-project-diagram" style="color: var(--primary);"></i> Quy trình biến đổi dữ liệu (Data Transformation Pipeline)</div>
+        <span class="badge badge-primary">map() 1-to-1 Mapping</span>
+      </div>
+      <div class="card-body">
+        
+        <!-- Input Controls -->
+        <div class="form-group">
+          <label class="form-label" for="names-input">Nhập danh sách tên (phân cách bởi dấu phẩy):</label>
+          <div style="display: flex; gap: 0.5rem;">
+            <input type="text" id="names-input" class="form-control" value="Huỳnh Hữu Phước, Nguyễn Văn An, Trần Thị Mai Lan, Lê Hoàng Phúc, Đặng Thùy Dương">
+            <button class="btn btn-primary" id="btn-transform" style="white-space: nowrap;">
+              <i class="fas fa-magic"></i> Biến đổi map()
+            </button>
+          </div>
+        </div>
+
+        <!-- Preset buttons -->
+        <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
+          <span style="font-size: 0.8rem; font-weight: 700; color: var(--slate-500);">Dữ liệu mẫu nhanh:</span>
+          <button class="btn btn-sm btn-secondary preset-btn" data-preset="sinhvien">Nhóm sinh viên</button>
+          <button class="btn btn-sm btn-secondary preset-btn" data-preset="kynang">Kỹ năng Frontend</button>
+          <button class="btn btn-sm btn-secondary preset-btn" data-preset="monhoc">Môn học CNTT</button>
+        </div>
+
+        <!-- 3-Step Pipeline Flow -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; align-items: stretch;">
+          
+          <!-- Step 1: Raw Array -->
+          <div style="background: var(--slate-50); border: 1.5px solid var(--slate-200); border-radius: var(--radius-md); padding: 1.25rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+              <strong style="color: var(--dark); font-size: 0.9rem;"><i class="fas fa-database"></i> 1. Mảng gốc (Input Array)</strong>
+              <span class="badge badge-secondary" id="badge-input-count">5 items</span>
+            </div>
+            <pre id="display-raw-array" style="background: var(--white); border: 1px solid var(--slate-200); border-radius: var(--radius-sm); padding: 0.75rem; font-family: var(--font-mono); font-size: 0.8rem; overflow-x: auto; color: var(--slate-700); min-height: 120px;"></pre>
+          </div>
+
+          <!-- Step 2: Array of HTML strings -->
+          <div style="background: var(--slate-50); border: 1.5px solid var(--secondary); border-radius: var(--radius-md); padding: 1.25rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+              <strong style="color: var(--secondary-hover); font-size: 0.9rem;"><i class="fas fa-code"></i> 2. Mảng thẻ &lt;li&gt; (map result)</strong>
+              <span class="badge badge-primary">String Array</span>
+            </div>
+            <pre id="display-html-array" style="background: #0b1120; border-radius: var(--radius-sm); padding: 0.75rem; font-family: var(--font-mono); font-size: 0.8rem; overflow-x: auto; color: #38bdf8; min-height: 120px;"></pre>
+          </div>
+
+          <!-- Step 3: Rendered DOM List -->
+          <div style="background: var(--primary-light); border: 1.5px solid var(--primary); border-radius: var(--radius-md); padding: 1.25rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+              <strong style="color: var(--primary); font-size: 0.9rem;"><i class="fas fa-desktop"></i> 3. Render ra giao diện (DOM &lt;ul&gt;)</strong>
+              <span class="badge badge-success">Live DOM</span>
+            </div>
+            <div style="background: var(--white); border-radius: var(--radius-sm); padding: 0.75rem; min-height: 120px; border: 1px solid var(--slate-200);">
+              <ul id="rendered-ul-list" style="padding-left: 1.25rem; font-size: 0.9rem; display: flex; flex-direction: column; gap: 0.35rem; color: var(--dark);">
+                <!-- <li> elements rendered here -->
+              </ul>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Code Explanation -->
+    <div class="code-panel">
+      <div class="code-header">
+        <span class="code-title">array_map_transformation.js (Mã nguồn thực hiện Bài 5)</span>
+        <button class="btn btn-sm btn-secondary" onclick="copyToClipboard(document.getElementById('code-map-transform').innerText)">
+          <i class="far fa-copy"></i> Copy
+        </button>
+      </div>
+      <pre class="code-content" id="code-map-transform"><code>// 1. Mảng danh sách tên ban đầu
+const danhSachTen = ["Huỳnh Hữu Phước", "Nguyễn Văn An", "Trần Thị Mai Lan"];
+
+// 2. Sử dụng map() để biến đổi từng tên thành thẻ &lt;li&gt;
+// map() tạo ra một mảng mới có cùng độ dài, mỗi phần tử là giá trị trả về của hàm callback
+const mangTheLi = danhSachTen.map(ten => `&lt;li class="list-item"&gt;${ten}&lt;/li&gt;`);
+
+console.log("Mảng các thẻ li:", mangTheLi);
+// Kết quả: ["&lt;li class=\"list-item\"&gt;Huỳnh Hữu Phước&lt;/li&gt;", ...]
+
+// 3. Đổ ra giao diện bằng cách nối mảng thành chuỗi với join('')
+const ulElement = document.getElementById('myList');
+ulElement.innerHTML = mangTheLi.join('');</code></pre>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <i class="fas fa-laptop-code"></i> Đại học Lạc Hồng · Khoa Công Nghệ Thông Tin
+      </div>
+      <div>Sinh viên: <strong>Huỳnh Hữu Phước</strong> (MSSV: 125000155) · Tuần 12</div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    const presets = {
+      sinhvien: ["Huỳnh Hữu Phước", "Nguyễn Văn An", "Trần Thị Mai Lan", "Lê Hoàng Phúc", "Đặng Thùy Dương"],
+      kynang: ["HTML5 Semantics", "CSS3 Flexbox & Grid", "JavaScript Modern ES6+", "DOM Manipulation", "REST API & JSON"],
+      monhoc: ["Thiết kế Web", "Cấu trúc dữ liệu & Giải thuật", "Cơ sở dữ liệu", "Lập trình hướng đối tượng", "Phân tích thiết kế hệ thống"]
+    };
+
+    function runTransformation(nameList) {
+      document.getElementById('badge-input-count').textContent = `${nameList.length} phần tử`;
+
+      // 1. Hiển thị mảng đầu vào
+      document.getElementById('display-raw-array').textContent = JSON.stringify(nameList, null, 2);
+
+      // 2. DÙNG HÀM MAP() BIẾN ĐỔI MẢNG THÀNH CÁC THẺ <li> THEO ĐÚNG BÀI 5
+      const mangTheLi = nameList.map((ten, index) => `<li class="name-item" data-index="${index}"><i class="fas fa-check text-primary"></i> <strong>${ten}</strong></li>`);
+
+      // Hiển thị mảng chuỗi kết quả
+      document.getElementById('display-html-array').textContent = JSON.stringify(mangTheLi, null, 2);
+
+      // 3. Đổ ra thẻ <ul>
+      const ulContainer = document.getElementById('rendered-ul-list');
+      ulContainer.innerHTML = mangTheLi.join('');
+
+      console.log("Bài 5: Mảng đầu vào:", nameList);
+      console.log("Bài 5: Mảng thẻ <li> từ map():", mangTheLi);
+    }
+
+    // Nút thực thi
+    document.getElementById('btn-transform').addEventListener('click', () => {
+      const rawText = document.getElementById('names-input').value;
+      const list = rawText.split(',').map(item => item.trim()).filter(item => item.length > 0);
+      if (list.length === 0) {
+        showToast('Vui lòng nhập ít nhất 1 tên!', 'warning');
+        return;
+      }
+      runTransformation(list);
+      showToast(`Đã map() thành công ${list.length} thẻ <li>!`, 'success');
+    });
+
+    // Preset buttons
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = btn.getAttribute('data-preset');
+        const data = presets[key];
+        document.getElementById('names-input').value = data.join(', ');
+        runTransformation(data);
+        showToast(`Đã nạp mẫu: ${btn.textContent}`, 'info');
+      });
+    });
+
+    // Khởi chạy ban đầu
+    runTransformation(presets.sinhvien);
+    console.log("Bài 5: Biến đổi mảng với map() sẵn sàng!");
+  </script>
+</body>
+</html>
